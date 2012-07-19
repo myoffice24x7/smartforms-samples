@@ -5,4 +5,4 @@ A repository of sample [SmartForms](http://www.myoffice24x7.com/web/smartforms) 
 Included Samples
 ----------------
 
-* [Product Survey](//github.com/myoffice24x7/smartforms-samples/product-survey) - a multi-page product survey with email workflow
+* [Product Survey](//github.com/myoffice24x7/smartforms-samples/tree/master/product-survey) - a multi-page product survey with email workflow
