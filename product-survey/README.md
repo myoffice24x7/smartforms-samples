@@ -9,9 +9,11 @@ http://docs.smartforms.myoffice24x7.com/tutorial_use-case_product-survey.html
 Included Assets
 ----------------
 *README.md* - This file
+
 *workflow.md* - Instructions on configuring workflows associated with this Form Type.
 
 *definition.xml*  - The form definition
+
 *styles.css* - Global styles for use in the form type
 
 *smartform-schema.xsd* - The schema against which this form was written (for your convenience)
