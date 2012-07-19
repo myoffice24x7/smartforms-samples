@@ -1,0 +1,429 @@
+<?xml version="1.0"?>
+<smartform xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="smartform-schema.xsd" child-layouts="wide-label top-label non-bold-label">
+  <description>Product Satisfaction SmartForms Demo</description>
+
+  <start-page page-layout-name="front-page">
+    <title>Product Satisfaction SmartForms Demo</title>
+    <asset>
+      <content>
+        <![CDATA[
+            <p>Press &ldquo;START&rdquo; button below to begin this SmartForm.</p>
+            <p><img src="//cloudfront.myoffice24x7.com/image/img-19840" /></p>
+          ]]>
+      </content>
+    </asset>
+
+  </start-page>
+  <completed-page page-layout-name="front-page">
+    <title>Thanks for your participation in Product XXX Satisfaction SmartForms Demo</title>
+    <description><![CDATA[<p>Your feedback has been successfully received.</p>]]></description>
+  </completed-page>
+
+  <page name="About">
+    <title>About Product XXX</title>
+    <group>
+      <state-rules>
+        <default-state state-name="REQUIRED"/>
+      </state-rules>
+      <choice-field name="length_of_use" style="RADIO" field-layouts="wide-label top-label non-bold-label vertical-choice-field">
+        <label><![CDATA[<b>1.</b> How long have you used this product?]]></label>
+        <validation-rules>
+          <must-have-value error-message="Please select length of product use"/>
+        </validation-rules>
+        <constant-options>
+          <option value="Less than one month"/>
+          <option value="One to six months"/>
+          <option value="One to two years"/>
+          <option value="More than two years"/>
+        </constant-options>
+      </choice-field>
+
+      <choice-field name="learn_channel" style="CHECKBOX"
+        field-layouts="horizontal-choice-field wide-label top-label non-bold-label">
+        <label><![CDATA[<b>2.</b> How did you learn about this product?]]></label>
+        <validation-rules>
+          <must-have-value error-message="Please select one or more options"/>
+        </validation-rules>
+        <constant-options>
+          <option value="Television"/>
+          <option value="Radio"/>
+          <option value="Newspaper"/>
+          <option value="Magazine"/>
+          <option value="Internet/Website"/>
+          <option value="Friend/Relative"/>
+          <option value="Other"/>
+        </constant-options>
+      </choice-field>
+    </group>
+
+    <group>
+      <state-rules>
+        <conditional-state state-name="REQUIRED">
+          <condition-set>
+            <field-contains field-name="learn_channel">Newspaper</field-contains>
+          </condition-set>
+        </conditional-state>
+        <default-state state-name="HIDDEN"/>
+      </state-rules>
+
+      <input-text-field name="learn_channel_newspaper" size="40">
+        <label><![CDATA[If in a newspaper, which one?]]></label>
+        <validation-rules>
+          <min-length error-message="Please tell us which newspaper you saw our ad in" value="3"/>
+        </validation-rules>
+      </input-text-field>
+    </group>
+
+    <group>
+      <state-rules>
+        <conditional-state state-name="REQUIRED">
+          <condition-set>
+            <field-contains field-name="learn_channel">Other</field-contains>
+          </condition-set>
+        </conditional-state>
+        <default-state state-name="HIDDEN"/>
+      </state-rules>
+
+      <input-text-field name="learn_channel_other" size="40" >
+        <label><![CDATA[If other, please specify:]]></label>
+        <validation-rules>
+          <min-length error-message="Please tell us where you found the product information"
+            value="3"/>
+        </validation-rules>
+      </input-text-field>
+    </group>
+
+    <group>
+      <state-rules>
+        <default-state state-name="REQUIRED"/>
+      </state-rules>
+      <choice-field name="purchase_place" style="RADIO" field-layouts="vertical-choice-field wide-label top-label non-bold-label">
+        <label><![CDATA[<b>3.</b> Where do you usually buy this product?]]></label>
+        <validation-rules>
+          <must-have-value error-message="Please select an option"/>
+        </validation-rules>
+        <constant-options>
+          <option value="Grocery store"/>
+          <option value="Discount store"/>
+          <option value="Department store"/>
+          <option value="Drug store"/>
+          <option value="Mail order"/>
+          <option value="Internet/Online"/>
+          <option value="Other"/>
+        </constant-options>
+      </choice-field>
+    </group>
+
+    <group>
+      <state-rules>
+        <conditional-state state-name="REQUIRED">
+          <condition-set>
+            <field-contains field-name="purchase_place">Other</field-contains>
+          </condition-set>
+        </conditional-state>
+        <default-state state-name="HIDDEN"/>
+      </state-rules>
+      <input-text-field name="purchase_place_other" size="40">
+        <label><![CDATA[If other, please specify:]]></label>
+        <validation-rules>
+          <min-length error-message="Please tell us where you found the product information"
+            value="3"/>
+        </validation-rules>
+      </input-text-field>
+    </group>
+  </page>
+
+  <page name="Satisfaction Level">
+    <title>Product XXX Satisfaction Level</title>
+    <choice-field name="use_frequency" style="RADIO" field-layouts="vertical-choice-field wide-label top-label non-bold-label">
+      <label><![CDATA[<b>4.</b> How often do you use this product?]]></label>
+      <validation-rules>
+        <must-have-value error-message="Please select an option"/>
+      </validation-rules>
+      <constant-options>
+        <option value="Daily"/>
+        <option value="More than once a week"/>
+        <option value="Once a week"/>
+        <option value="Every two weeks"/>
+        <option value="Once a month"/>
+        <option value="Less than once a month"/>
+        <option value="Less than once a year"/>
+        <option value="Once a year or more"/>
+      </constant-options>
+    </choice-field>
+    <choice-field name="satisfaction_level" style="RADIO" field-layouts="vertical-choice-field wide-label top-label non-bold-label">
+      <label><![CDATA[<b>5.</b> On a scale 1 to 5 (with 1 being very dissatisfied and 5 being very satisfied) how satisfied are you with this product?]]></label>
+      <validation-rules>
+        <must-have-value error-message="Please select an option"/>
+      </validation-rules>
+      <constant-options>
+        <option value="1">1 (very dissatisfied)</option>
+        <option value="2"/>
+        <option value="3"/>
+        <option value="4"/>
+        <option value="5">5 (very satisfied)</option>
+      </constant-options>
+    </choice-field>
+    <asset>
+      <state-rules>
+        <conditional-state state-name="OPTIONAL">
+          <condition-set>
+            <field-equal field-name="satisfaction_level">1</field-equal>
+          </condition-set>
+        </conditional-state>
+        <default-state state-name="HIDDEN"/>
+      </state-rules>
+      <content>
+        <![CDATA[<span>Please tell us why you are so unhappy with our product</span>]]>
+      </content>
+    </asset>
+
+    <text-area-field name="satisfaction_level_comments" cols="80" rows="4">
+      <state-rules>
+        <conditional-state state-name="REQUIRED">
+          <condition-set>
+            <field-equal field-name="satisfaction_level">1</field-equal>
+          </condition-set>
+        </conditional-state>
+        <default-state state-name="OPTIONAL"/>
+      </state-rules>
+      <label><![CDATA[If you wish, add your comments regarding level of satisfaction:]]></label>      
+      <validation-rules>
+        <min-length error-message="Please help us improve our product" value="3"/>
+      </validation-rules>
+    </text-area-field>
+  </page>
+
+  <page name="Quality">
+    <title>Product XXX Quality</title>
+    <group>
+      <state-rules>
+        <default-state state-name="REQUIRED"/>
+      </state-rules>
+      <choice-field name="quality_rating" style="RADIO" field-layouts="horizontal-choice-field wide-label top-label non-bold-label">
+        <label><![CDATA[<b>6.</b> Please give your overall opinion about our product&rsquo;s quality:]]></label>
+        <validation-rules>
+          <must-have-value error-message="Please select an option"/>
+        </validation-rules>
+        <constant-options>
+          <option value="1">Very low</option>
+          <option value="2">Low</option>
+          <option value="3">Average</option>
+          <option value="4">High</option>
+          <option value="5">Very high</option>
+        </constant-options>
+      </choice-field>
+    </group>
+
+    <group>
+      <state-rules>
+        <conditional-state state-name="REQUIRED">
+          <condition-set>
+            <field-equal field-name="quality_rating">1</field-equal>
+          </condition-set>
+        </conditional-state>
+        <default-state state-name="HIDDEN"/>
+      </state-rules>
+      <text-area-field name="why_low" cols="80" rows="3">
+        <label><![CDATA[If &ldquo;Very low&rdquo;, which parts are really that bad?]]></label>
+        <validation-rules>
+          <min-length error-message="Please enter your feedback (minimum of 10 characters)"
+            value="10"/>
+        </validation-rules>
+      </text-area-field>
+    </group>
+
+    <group>
+      <state-rules>
+        <conditional-state state-name="REQUIRED">
+          <condition-set>
+            <field-equal field-name="quality_rating">5</field-equal>
+          </condition-set>
+        </conditional-state>
+        <default-state state-name="HIDDEN"/>
+      </state-rules>
+      <text-area-field name="why_high" cols="80" rows="3">
+        <label><![CDATA[If &ldquo;Very high&rdquo;, which parts are exceptionally good?]]></label>
+        <validation-rules>
+          <min-length error-message="Please enter your feedback (minimum of 10 characters)"
+            value="10"/>
+        </validation-rules>
+      </text-area-field>
+    </group>
+
+    <group>
+      <state-rules>
+        <conditional-state state-name="REQUIRED">
+          <condition-set>
+            <field-has-value field-name="quality_rating"/>
+          </condition-set>
+        </conditional-state>
+        <default-state state-name="HIDDEN"/>
+      </state-rules>
+      <choice-field name="quality_comparison" style="RADIO"
+        field-layouts="vertical-choice-field wide-label top-label non-bold-label">
+        <label><![CDATA[<b>7.</b> Compared to other products of this type, the quality of this product is:]]></label>
+        <validation-rules>
+          <must-have-value error-message="Please select an option"/>
+        </validation-rules>
+        <constant-options>
+          <option value="1">Much worse</option>
+          <option value="2">Worse</option>
+          <option value="3">About the same</option>
+          <option value="4">Better</option>
+        </constant-options>
+      </choice-field>
+    </group>
+
+    <group>
+      <state-rules>
+        <conditional-state state-name="REQUIRED">
+          <condition-set>
+            <field-has-value field-name="quality_comparison"/>
+          </condition-set>
+        </conditional-state>
+        <default-state state-name="HIDDEN"/>
+      </state-rules>
+      <choice-field name="continue_use" style="RADIO" field-layouts="horizontal-choice-field wide-label top-label non-bold-label">
+        <label><![CDATA[<b>8.</b> Will you continue to use our product?]]></label>
+        <validation-rules>
+          <must-have-value error-message="Please select an option"/>
+        </validation-rules>
+        <constant-options>
+          <option value="Yes"/>
+          <option value="No"/>
+        </constant-options>
+      </choice-field>
+    </group>
+
+    <group>
+      <state-rules>
+        <conditional-state state-name="REQUIRED">
+          <condition-set>
+            <field-has-value field-name="quality_comparison"/>
+          </condition-set>
+        </conditional-state>
+        <default-state state-name="HIDDEN"/>
+      </state-rules>
+      <choice-field name="recommend" style="RADIO" field-layouts="horizontal-choice-field wide-label top-label non-bold-label">
+        <label><![CDATA[<b>9.</b> Would you recommend our product to others?]]></label>
+        <validation-rules>
+          <must-have-value error-message="Please select an option"/>
+        </validation-rules>
+        <constant-options>
+          <option value="Yes"/>
+          <option value="No"/>
+        </constant-options>
+      </choice-field>
+    </group>
+
+  </page>
+
+  <submission-page name="Thank you">
+    <title>Thank You!</title>
+    <group>
+      <state-rules>
+        <default-state state-name="REQUIRED"/>
+      </state-rules>
+      <choice-field name="thank_you" style="RADIO" field-layouts="horizontal-choice-field wide-label top-label non-bold-label">
+        <label><![CDATA[Thank you for completing this survey. Would you like us to send you a gift certificate?]]></label>
+        <validation-rules>
+          <must-have-value error-message="Please choose an option"/>
+        </validation-rules>
+        <constant-options>
+          <option value="Yes"/>
+          <option value="No"/>
+        </constant-options>
+      </choice-field>
+    </group>
+
+    <group>
+      <state-rules>
+        <conditional-state state-name="REQUIRED">
+          <condition-set>
+            <field-equal field-name="thank_you">Yes</field-equal>
+          </condition-set>
+        </conditional-state>
+        <default-state state-name="HIDDEN"/>
+      </state-rules>
+      <input-text-field name="email" size="40">
+        <description><![CDATA[To receive a gift certificate we will need you email address]]></description>
+        <label><![CDATA[Email:]]></label>
+        <validation-rules>
+          <regex-match error-message="Valid email address is required"
+            >^([A-Za-z0-9\-\.\_]*@[a-z0-9\-\.\_]*)$</regex-match>
+        </validation-rules>
+      </input-text-field>
+    </group>
+
+    <group>
+      <state-rules>
+        <default-state state-name="OPTIONAL"/>
+      </state-rules>
+      <text-area-field name="final_comments" rows="9" cols="80">
+        <label><![CDATA[<b>10.</b> Do you have any additional comments you would like to make?]]></label>
+      </text-area-field>
+    </group>
+  </submission-page>
+
+  <policy single-session-per-owner="true">
+    <park-when-idle-period>PT3M</park-when-idle-period>
+    <retention-period>
+      <incomplete-forms>PT12M</incomplete-forms>
+      <complete-forms>P2M</complete-forms>
+    </retention-period>
+  </policy>
+
+  <controls>
+    <start>Start</start>
+    <restart-form>Restart</restart-form>
+    <next-page enforce-validation="true">Next</next-page>
+    <previous-page>Previous</previous-page>
+    <submit-form prompt="Please confirm that you are ready to submit" percentage-complete="100"
+      >Submit</submit-form>
+    <quit-form prompt="Please confirm that you would like to quit (all your data will be deleted)"
+      >Quit</quit-form>
+  </controls>
+
+  <layouts>
+    <field-layout name="wide-label">
+      <for-label style="width: 100%;"/>
+    </field-layout>
+    <field-layout name="top-label">
+      <for-label class="default top" style="margin-bottom: 15px;"/>
+    </field-layout>
+    <field-layout name="non-bold-label">
+      <for-label style="font-weight: normal"/>
+    </field-layout>
+    <page-layout name="front-page">
+      <for-container style="width:100%; text-align:center;"/>
+    </page-layout>
+    <field-layout name="vertical-choice-field">
+      <for-input style="display: block; margin-bottom: 10px;"/>
+    </field-layout>
+    <field-layout name="horizontal-choice-field">
+      <for-input style="padding-right: 1em;"/>
+    </field-layout>
+  </layouts>
+
+  <states>
+    <state name="REQUIRED" hidden="false" disabled="false" required="true"/>
+    <state name="OPTIONAL" hidden="false" disabled="false" required="false"/>
+    <state name="HIDDEN" hidden="true" disabled="false" required="false"/>
+    <state name="READONLY" hidden="false" disabled="false" required="false" readonly="true"/>
+    <precedence-rules>
+      <precedence-rule>
+        <parent-state-name>REQUIRED</parent-state-name>
+        <child-state-name-pattern>^()$</child-state-name-pattern>
+        <derived-state-name>REQUIRED</derived-state-name>
+      </precedence-rule>
+      <precedence-rule>
+        <parent-state-name>HIDDEN</parent-state-name>
+        <child-state-name-pattern>.*</child-state-name-pattern>
+        <derived-state-name>HIDDEN</derived-state-name>
+      </precedence-rule>
+    </precedence-rules>
+  </states>
+
+</smartform>
