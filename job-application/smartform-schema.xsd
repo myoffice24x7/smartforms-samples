@@ -1,0 +1,2683 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+ <xs:annotation>
+  <xs:documentation>
+   definition-schema.xsd 18/July/2012
+  </xs:documentation>
+ </xs:annotation>
+ <xs:annotation>
+  <xs:documentation>
+   Copyright 1995-2012 MyOffice24x7 Pty Ltd Australia All rights reserved.
+  </xs:documentation>
+ </xs:annotation>
+  <xs:annotation>
+     <xs:documentation>
+    This is the XML Schema for the SmartForm descriptor.
+  </xs:documentation>
+ </xs:annotation>
+ <xs:element name="smartform">
+  <xs:annotation>
+   <xs:documentation>
+    The smartform element is a root element in a SmartForm descriptor.
+   </xs:documentation>
+  </xs:annotation>
+  <xs:complexType>
+   <xs:annotation>
+    <xs:documentation>
+     Smartform descriptor consists of:
+     a) description
+     b) definition of start/welcome page
+     c) definition of other pages
+     d) definition of finish/submission page
+     e) definition of record-keeping policy
+     f) definition of control buttons
+     g) definition of layouts for pages, assets, groups and fields (optional)
+     h) definition of states for stateful elements (optional)
+     k) child-layouts (optional)
+    </xs:documentation>
+   </xs:annotation>
+   <xs:sequence minOccurs="1" maxOccurs="1">
+
+    <xs:element name="description" minOccurs="1" type="mediumNonEmptyToken" maxOccurs="1">
+     <xs:annotation>
+      <xs:documentation>
+       Short description of this smart form - will only be seen by users with administrative rights to the smartform portlet.
+      </xs:documentation>
+     </xs:annotation>
+    </xs:element>
+    <xs:element name="start-page" type="bookend-page-type" minOccurs="1" maxOccurs="1" />
+    <xs:element name="completed-page" type="bookend-page-type" minOccurs="0" maxOccurs="1" />
+    <xs:element name="page" type="page-type" minOccurs="0" maxOccurs="unbounded" />
+    <xs:element name="submission-page" type="page-type" minOccurs="1" maxOccurs="1" />
+    <xs:element name="policy" type="policy-type" minOccurs="1" maxOccurs="1" />    
+    <xs:element name="controls" minOccurs="1" maxOccurs="1">
+     <xs:complexType>
+       <xs:all><!-- Have explicitly added minOccurs attribute to all contained xs:elements because Eclipse seems to be confused about what the default for this attribute should be under xs:all  -->
+        <xs:element name="start" type="control-button-type" minOccurs="0">
+         <xs:annotation>
+          <xs:documentation>
+           Definition of "START" button. If defined, this control is displayed on start page.
+          </xs:documentation>
+         </xs:annotation>
+        </xs:element>
+        <!--xs:element name="start-from-upload" type="control-button-type" minOccurs="0">
+         <xs:annotation>
+          <xs:documentation>
+           Definition of "START FROM UPLOAD" button. If defined, this control is displayed on start page only.
+          </xs:documentation>
+         </xs:annotation>
+        </xs:element-->
+        <xs:element name="start-from-refcode" minOccurs="0">
+         <xs:annotation>
+          <xs:documentation>
+           Definition of "START FROM REFERENCE CODE" button. If defined, this control is displayed on start page only.
+          </xs:documentation>
+         </xs:annotation>
+          <xs:complexType>
+           <xs:simpleContent>
+            <xs:extension base="control-button-type">
+             <xs:attribute name="label-for-input" type="shortNonEmptyToken" use="optional">
+              <xs:annotation>
+               <xs:documentation>
+                Text that shall appear as a label for input element.
+               </xs:documentation>
+              </xs:annotation>
+             </xs:attribute>
+			<xs:attribute name="referenced-form-type" type="shortNonEmptyToken" use="required">
+				<xs:annotation>
+					<xs:documentation>
+						Name of a form which the referenced record must belong to. 
+						If form contains more than 1 submitted records that has the same
+						reference-code value, a record with the latest submission date
+						will be selected as a reference point.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="referenced-campaign-name" type="shortNonEmptyToken" use="optional">
+			<xs:annotation>
+				<xs:documentation>
+					Name of campaign which the referenced record must belong to.
+					If 'reference-form-campaign' is not defined, the search of a referenced record
+					will be used across all campaigns of 'reference-form-type'.
+				</xs:documentation>
+			</xs:annotation>
+			</xs:attribute>
+            </xs:extension>
+           </xs:simpleContent>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="next-page" minOccurs="1">
+         <xs:annotation>
+          <xs:documentation>
+           Definition of "NEXT PAGE" button. If defined, this control is displayed on every page, except the start, submission and completed pages.
+          </xs:documentation>
+         </xs:annotation>
+          <xs:complexType>
+           <xs:annotation>
+            <xs:documentation>
+             Definition of a control button which forces current page validation when clicked 
+            </xs:documentation>
+           </xs:annotation>
+           <xs:simpleContent>
+            <xs:extension base="control-button-type">
+             <xs:attribute name="enforce-validation" type="xs:boolean" use="optional" default="false">
+              <xs:annotation>
+               <xs:documentation>
+                If 'true' all fields on the current page must pass validation before control action occurs. 
+               </xs:documentation>
+              </xs:annotation>
+             </xs:attribute>
+            </xs:extension>
+           </xs:simpleContent>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="previous-page" type="control-button-type" minOccurs="0">
+         <xs:annotation>
+          <xs:documentation>
+           Definition of "PREVIOUS PAGE" button. If defined, this control is displayed on every page, except the start, first and completed pages
+          </xs:documentation>
+         </xs:annotation>
+        </xs:element>
+        <xs:element name="submit-form" minOccurs="1">
+         <xs:annotation>
+          <xs:documentation>
+           Definition of "SUBMIT FORM" button. This control is displayed on submission page only. Allows enforcement of an overall percentage completion (of required fields) before it will perform its action
+          </xs:documentation>
+         </xs:annotation>
+         <xs:complexType>
+          <xs:annotation>
+           <xs:documentation>
+            Definition of a control button which enforces a percentage completion level before action occurs 
+           </xs:documentation>
+          </xs:annotation> 
+          <xs:complexContent>
+           <xs:extension base="prompting-control-button-type">
+            <xs:attribute name="percentage-complete" use="optional" default="0">
+             <xs:annotation>
+              <xs:documentation>
+               Sets the overall percentage completion (of required fields) before this button will perform its action 
+              </xs:documentation>
+             </xs:annotation>
+             <xs:simpleType>
+              <xs:restriction base="xs:unsignedByte">
+               <xs:maxInclusive value="100" />
+              </xs:restriction>
+             </xs:simpleType>
+            </xs:attribute>
+           </xs:extension>
+          </xs:complexContent>
+         </xs:complexType>
+        </xs:element>
+        <xs:element name="quit-form" type="prompting-control-button-type" minOccurs="1">
+         <xs:annotation>
+          <xs:documentation>
+           Definition of "QUIT" button. This button is displayed on every page except the start and completed pages.
+          </xs:documentation>
+         </xs:annotation>
+        </xs:element>
+        <xs:element name="restart-form" type="control-button-type" minOccurs="0">
+         <xs:annotation>
+          <xs:documentation>
+           Definition of "RESTART" button. This button is displayed on the completed page only.
+          </xs:documentation>
+         </xs:annotation>
+        </xs:element>
+       </xs:all>
+      </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="form-layout" minOccurs="0" maxOccurs="1">
+     <xs:annotation>
+       <xs:documentation>
+         <![CDATA[
+         Style properties for major elements of the form
+         
+         Layout description for form consists of the following attributes:
+          a) [optional] max-pages-displayed
+          b) [optional] maximise-on-start
+         ]]>
+       </xs:documentation>
+      </xs:annotation>
+      <xs:complexType>
+       <xs:sequence>
+       </xs:sequence>
+      <xs:attribute name="max-pages-displayed" type="xs:integer" default="0" use="optional">
+  	   <xs:annotation>
+        <xs:documentation>
+  		 Defines the maximum number of page tabs displayed in one row.
+         When value is set to 0 (or has negative value), all pages are displayed. Defaults to 0
+  		</xs:documentation>
+  	   </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="maximise-on-start" type="xs:boolean" default="false" use="optional">
+  	   <xs:annotation>
+        <xs:documentation>
+  		 When set to true, the client smartform application will attempt to occupy an entire visible space on view port. Defaults to FALSE
+  		</xs:documentation>
+  	   </xs:annotation>
+      </xs:attribute>
+     </xs:complexType>
+    </xs:element>
+
+    <xs:element name="layouts" minOccurs="0" maxOccurs="1">
+     <xs:annotation>
+      <xs:documentation>
+       The collection of layouts defined for this smartform
+      </xs:documentation>
+     </xs:annotation>
+     <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+       <xs:element name="asset-layout" type="asset-layout-type" />
+       <xs:element name="page-layout" type="layout-components-type" />
+       <xs:element name="group-layout" type="layout-components-type" />
+       <xs:element name="field-layout" type="field-layout-type" />
+      </xs:choice>
+     </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="states" minOccurs="0" maxOccurs="1">
+     <xs:annotation>
+      <xs:documentation>
+       The collection of states defined for this smartform
+      </xs:documentation>
+     </xs:annotation>
+     <xs:complexType>
+      <xs:sequence minOccurs="1" maxOccurs="1">
+       <xs:element name="state" type="state-declaration-element" minOccurs="1" maxOccurs="unbounded"/>
+       <xs:element name="precedence-rules" minOccurs="0" maxOccurs="1">
+        <xs:complexType>
+         <xs:sequence minOccurs="1" maxOccurs="unbounded">
+          <xs:element name="precedence-rule" type="state-precedence-rule-element"/>
+         </xs:sequence>
+        </xs:complexType>
+       </xs:element>
+      </xs:sequence>
+     </xs:complexType>
+    </xs:element>
+   </xs:sequence>
+    <xs:attribute name="child-layouts" type="IDREFs" use="optional">
+     <xs:annotation>
+      <xs:documentation>
+       List of declared layouts to apply to visual elements (groups, assets, fields) contained within this form. 
+       The application of these layouts to individual visual elements can be overridden by the explicit use of the applicable child-layout and page/group/asset/field-layout attribute on those elements.  
+      </xs:documentation>
+     </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+ </xs:element>
+
+
+ <xs:simpleType name="control-button-type">
+  <xs:annotation>
+   <xs:documentation>
+    Definition of a control button 
+   </xs:documentation>
+  </xs:annotation>
+  <xs:restriction base="shortNonEmptyToken" />
+ </xs:simpleType>
+
+ <xs:complexType name="prompting-control-button-type">
+  <xs:annotation>
+   <xs:documentation>
+    Definition of a control button which offers a prompt when clicked 
+   </xs:documentation>
+  </xs:annotation>
+  <xs:simpleContent>
+   <xs:extension base="control-button-type">
+    <xs:attribute name="prompt" type="mediumNonEmptyToken" use="required">
+     <xs:annotation>
+      <xs:documentation>
+       Message to appear in dialog box when button is clicked 
+      </xs:documentation>
+     </xs:annotation>
+    </xs:attribute>
+   </xs:extension>
+  </xs:simpleContent>
+ </xs:complexType>
+
+ <xs:complexType name="policy-type">
+  <xs:annotation>
+   <xs:documentation>
+    Definition of record management policy
+   </xs:documentation>
+  </xs:annotation>
+  <xs:sequence minOccurs="1" maxOccurs="1">
+   <xs:element name="park-when-idle-period" type="xs:duration" minOccurs="0" maxOccurs="1">
+    <xs:annotation>
+     <xs:documentation>
+      Specifies the period when forms that have been idle for a specified time will be transferred into a parked state.
+      e.g. a value of "PT10M" states that the form will be parked if idle for 10 minutes.
+      Please see the W3C document "XML Schema Part 2: Datatypes" (2nd Edition) for the full definition of this elements's format.
+      Note: Parking will not be performed if this element is not specified or its value is 0.
+     </xs:documentation>
+    </xs:annotation>
+   </xs:element>
+   <xs:element name="retention-period">
+    <xs:annotation>
+     <xs:documentation>
+      Specifies the duration of record keeping depending on form status
+     </xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+     <xs:sequence minOccurs="1" maxOccurs="1">
+      <xs:element name="incomplete-forms" type="xs:duration" minOccurs="1" maxOccurs="1">
+       <xs:annotation>
+        <xs:documentation>
+         Specifies the record-keeping period for incomplete/abandonded forms, i.e. forms that have been started but not completed or suspended.
+         eg. a value of "P7D" indicates that retention for for 7 days,  "PT12H" indicates retention for 12 hours
+         Please see the W3C document "XML Schema Part 2: Datatypes" (2nd Edition) for the full definition of this elements's format.
+        </xs:documentation>
+       </xs:annotation>
+      </xs:element>
+<!--  TODO: Uncomment this element when user requested suspension is enabled
+      <xs:element name="suspended-forms" type="xs:duration" minOccurs="1" maxOccurs="1">
+       <xs:annotation>
+        <xs:documentation>
+         Specifies the record-keeping period for forms which have been manually suspended by users.
+         eg. a value of "P2M" indicates that retention for for 2 months, "PT14D" indicates retention for 14 days
+         Please see the W3C document "XML Schema Part 2: Datatypes" (2nd Edition) for the full definition of this elements's format.
+        </xs:documentation>
+       </xs:annotation>
+      </xs:element> -->
+      <xs:element name="complete-forms" type="xs:duration" minOccurs="1" maxOccurs="1">
+       <xs:annotation>
+        <xs:documentation>
+         Specifies the record-keeping period for forms that have reached the submitted state.  
+         eg. a value of "P5Y" indicates that retention for for 5 years, "P6M" indicates retention for 6 months
+         Please see the W3C document "XML Schema Part 2: Datatypes" (2nd Edition) for the full definition of this elements's format.
+        </xs:documentation>
+       </xs:annotation>
+      </xs:element>
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+  </xs:sequence>
+  <xs:attribute name="encrypt" type="encryption-policy-list" use="optional" default="NONE">
+   <xs:annotation>
+    <xs:documentation>
+     If set to a value other than "NONE", user's data will stored in an encrypted format. Defaults to "NONE" 
+    </xs:documentation>
+   </xs:annotation>
+  </xs:attribute>
+  <xs:attribute name="single-session-per-owner" type="xs:boolean" use="optional" default="false">
+   <xs:annotation>
+    <xs:documentation>
+     If set to "true", this smartform campaign will remember previous authenticated users and the state of their response. Note: Setting this attribute to "true"
+     for a smartform campaign deployed to an guest user/anonymously accessible page will not provide any useful functionality. 
+    </xs:documentation>
+   </xs:annotation>
+  </xs:attribute>
+  <xs:attribute name="reference-code" type="reference-code-policy-list" use="optional" default="NONE">
+   <xs:annotation>
+    <xs:documentation>
+     Provides value generation policy for a reference code. Defaults to "NONE"
+    </xs:documentation>
+   </xs:annotation>
+  </xs:attribute>
+ </xs:complexType>
+
+
+ <xs:complexType name="bookend-page-type">
+  <xs:annotation>
+   <xs:documentation>
+    This type describes the content of an "bookend" page (ie. no content other than title, description and assets).
+   </xs:documentation>
+  </xs:annotation>
+  <xs:complexContent>
+   <xs:extension base="visual-element-type">
+    <xs:sequence>
+     <xs:element ref="asset" minOccurs="0" maxOccurs="unbounded" />
+    </xs:sequence>
+    <xs:attribute name="name" type="shortNonEmptyToken" use="optional" default="START">
+     <xs:annotation>
+      <xs:documentation>
+       Bookend Page element may have a 'name' attribute.
+      </xs:documentation>
+     </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="page-layout-name" type="xs:IDREF" use="optional">
+     <xs:annotation>
+      <xs:documentation>
+       [DEPRECATED] Page can be rendered using a custom page layout. Use 'page-layout-name' attribute to point to a name of a declared page-layout-element. 
+      </xs:documentation>
+     </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="page-layouts" type="IDREFs" use="optional">
+     <xs:annotation>
+      <xs:documentation>
+       Page can be rendered using one or more custom page layouts. Use 'page-layouts' attribute to point to a name of one ore more declared page-layout elements. 
+      </xs:documentation>
+     </xs:annotation>
+    </xs:attribute>
+   </xs:extension>
+  </xs:complexContent>
+ </xs:complexType>
+
+
+
+ <xs:complexType name="page-type">
+  <xs:annotation>
+   <xs:documentation>
+    This type describes the content of a normal smartform page.
+
+    Elements of this type contain the following sub-elements:
+       a) [optional] title (inherited from visual-element-type type)
+       b) [optional] description (inherited from visual-element-type type)
+       c) [optional] state (inherited from stateful-visual-type type)
+       d) a sequence of 1 or more: 
+         i) content elements (assets, groups, fields); OR
+         ii) sub-pages
+       
+    Elements of this type also have the following attributes:
+      a) name
+      b) [deprecated,optional] page-layout-name
+      b) [optional] page-layouts. Extends functionality provided by @page-layout-name
+   </xs:documentation>
+  </xs:annotation>
+  <xs:complexContent>
+   <xs:extension base="stateful-visual-type">
+    <xs:choice minOccurs="1" maxOccurs="1">
+     <xs:element ref="content" minOccurs="1" maxOccurs="unbounded" />
+     <xs:element name="page" type="page-type" minOccurs="1" maxOccurs="unbounded"/>
+    </xs:choice>
+    <xs:attribute name="name" type="shortNonEmptyToken" use="required">
+     <xs:annotation>
+      <xs:documentation>
+       Each element of this type must have a unique 'name' attribute.
+      </xs:documentation>
+     </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="page-layout-name" type="xs:IDREF" use="optional">
+     <xs:annotation>
+      <xs:documentation>
+       [DEPRECATED] Elements of this type can be rendered with additional styling information as specified in a delcared page-layout element. 
+       This attribute identifies the name of an existing page-layout element to be used as source for this additional styling information. 
+      </xs:documentation>
+     </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="page-layouts" type="IDREFs" use="optional">
+     <xs:annotation>
+      <xs:documentation>
+       Page can be rendered using one or more custom page layouts. Use 'page-layouts' attribute to point to a name of one ore more declared page-layout elements. 
+      </xs:documentation>
+     </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="child-layouts" type="IDREFs" use="optional">
+     <xs:annotation>
+      <xs:documentation>
+       List of declared layouts to apply to visual elements (groups, assets, fields) contained within this page. 
+       The application of these layouts to individual visual elements can be overridden by the explicit use of the applicable group/asset/field-layout attribute on those elements.  
+      </xs:documentation>
+     </xs:annotation>
+    </xs:attribute>
+   </xs:extension>
+  </xs:complexContent>
+ </xs:complexType>
+
+ <xs:complexType name="group-element-type">
+  <xs:annotation>
+   <xs:documentation>
+    This type acts as an generic container for zero or more other content items.
+
+    Elements of this type contain the following sub-elements:
+       a) [optional] title (inherited from visual-element-type type)
+       b) [optional] description (inherited from visual-element-type type)
+       c) [optional] state (inherited from stateful-visual-type type)
+       d) a sequence of 0 or more content elements (assets, groups, fields)
+       
+    Elements of this type also have the following attributes:
+      a) [optional] name
+      b) [optional,deprecated] group-layout-name
+      c) [optional] group-layouts Extends functionality provided by @group-layout-name
+
+   </xs:documentation>
+  </xs:annotation>
+  <xs:complexContent>
+   <xs:annotation>
+    <xs:documentation>
+    </xs:documentation>
+   </xs:annotation>
+   <xs:extension base="stateful-visual-type">
+<!--     
+    <xs:annotation>
+     <xs:documentation>
+      A group may contain other groups or visual elements (fields, assets, etc)
+     </xs:documentation>
+    </xs:annotation> -->
+    <xs:sequence>
+     <xs:element ref="content" maxOccurs="unbounded" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute name="name" type="shortID" use="optional">
+     <xs:annotation>
+      <xs:documentation>
+       Elements of this type may have a 'name' attribute. This attribute shall be used when references are made to this group 
+       <!-- e.g. in case when group is used as a template. Templates not yet implemented! -->
+      </xs:documentation>
+     </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="group-layout-name" type="xs:IDREF" use="optional">
+     <xs:annotation>
+      <xs:documentation>
+       [DEPRICATED] Elements of this type can be rendered with additional styling information as specified in a declared group-layout elements. 
+       This attribute identifies the name of an existing group-layout element to be used as source for this additional styling information. 
+      </xs:documentation>
+     </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="group-layouts" type="IDREFs" use="optional">
+     <xs:annotation>
+      <xs:documentation>
+       Elements of this type can be rendered with additional styling information as specified in one or more group-layout elements. 
+       This attribute identifies the name of an existing group-layout element to be used as source for this additional styling information. 
+      </xs:documentation>
+     </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="child-layouts" type="IDREFs" use="optional">
+     <xs:annotation>
+      <xs:documentation>
+       List of declared layouts to apply to visual elements (groups, assets, fields) contained within this group. 
+       The application of these layouts to individual visual elements can be overridden by the explicit use of the applicable group/asset/field-layout attribute on those elements.  
+      </xs:documentation>
+     </xs:annotation>
+    </xs:attribute>
+   </xs:extension>
+  </xs:complexContent>
+ </xs:complexType>
+
+ <xs:complexType name="asset-type">
+  <xs:annotation>
+   <xs:documentation>
+    Elements of this type are for the display of a non-submittable/informational content.
+
+    Elements of this type contain the following sub-elements:
+       a) [optional] title (inherited from visual-element-type type)
+       b) [optional] description (inherited from visual-element-type type)
+       c) [optional] state (inherited from stateful-visual-type type)
+       d) Either:
+         i) a pointer to external content fetched from a specified URI
+         ii) explicitly defined content 
+
+    Elements of this type also have the following attribute:
+      a) [optional, deprecated] asset-layout-name
+      b) [optional] asset-layouts. Extends functionality provided by @asset-layout-name
+
+   </xs:documentation>
+  </xs:annotation>
+  <xs:complexContent>
+   <xs:extension base="stateful-visual-type">
+    <xs:choice minOccurs="1" maxOccurs="1">
+     <xs:element name="content-uri" type="limitedURI">
+      <xs:annotation>
+       <xs:documentation>
+        URI to some external content
+       </xs:documentation>
+      </xs:annotation>
+     </xs:element>
+     <xs:element name="content" type="xs:string">
+      <xs:annotation>
+       <xs:documentation>
+        Inline static content
+       </xs:documentation>
+      </xs:annotation>
+     </xs:element>
+    </xs:choice>
+    <xs:attribute name="asset-layout-name" type="xs:IDREF" use="optional">
+     <xs:annotation>
+      <xs:documentation>
+       [DEPRECATED] Elements of this type can be rendered with additional styling information as specified in a declared asset-layout elements. 
+       This attribute identifies the name of an existing asset-layout element to be used as source for this additional styling information. 
+      </xs:documentation>
+     </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="asset-layouts" type="IDREFs" use="optional">
+     <xs:annotation>
+      <xs:documentation>
+       Elements of this type can be rendered with additional styling information as specified in one or more asset-layout elements. 
+       This attribute identifies the name of an existing asset-layout element to be used as source for this additional styling information. 
+      </xs:documentation>
+     </xs:annotation>
+    </xs:attribute>
+   </xs:extension>
+  </xs:complexContent>
+ </xs:complexType>
+
+
+
+
+ <xs:complexType name="simple-field-type" abstract="true">
+  <xs:annotation>
+   <xs:documentation>
+    This type contains the defintion of elements and attributes that are common to all field sub-types.
+
+    Elements of this type contain the following sub-elements:
+      a) [optional] title (inherited from visual-element-type type)
+      b) [optional] description (inherited from visual-element-type type)
+      c) [optional] state (inherited from stateful-visual-type type)
+      d) label
+
+    Elements of this type also have the following attributes:
+      a) name 
+      b) [optional] field-layout-name
+        
+   </xs:documentation>
+  </xs:annotation>
+  <xs:complexContent>
+   <xs:extension base="stateful-visual-type">
+    <xs:sequence>
+     <xs:element minOccurs="0" maxOccurs="1" name="label" type="mediumNonEmptyToken">
+      <xs:annotation>
+       <xs:documentation>
+        Field may have a label.
+        Depending on the selected layout type, value of 'label' element will be rendered as html label (by default) or 
+        as a title of an input field. 
+       </xs:documentation>
+      </xs:annotation>
+     </xs:element>
+    </xs:sequence>
+    <xs:attribute name="name" type="shortID" use="required">
+     <xs:annotation>
+      <xs:documentation>
+       Field element must have a 'name' attribute. It provides a unique key for the field within the smartform.
+      </xs:documentation>
+     </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="field-layout-name" type="xs:IDREF" use="optional">
+     <xs:annotation>
+      <xs:documentation>
+       [DEPRECATED] Field can be rendered using a custom field layout.
+       Use this attribute to point to a name of a declared field-layout-element. 
+      </xs:documentation>
+     </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="field-layouts" type="IDREFs" use="optional">
+     <xs:annotation>
+      <xs:documentation>
+       Field can be rendered using a custom field layout.
+       Use this attribute to point to a name of one or more a declared field-layout-elements. 
+      </xs:documentation>
+     </xs:annotation>
+    </xs:attribute>
+   </xs:extension>
+  </xs:complexContent>
+ </xs:complexType>
+
+
+ <xs:complexType name="field-type" abstract="true">
+  <xs:annotation>
+   <xs:documentation>
+    This type contains the defintion of elements and attributes that are common to most field sub-types except file-attachment-type, capcha-field-type.
+
+    Elements of this type contain the following sub-elements:
+      a) [optional] title (inherited from visual-element-type type)
+      b) [optional] description (inherited from visual-element-type type)
+      c) [optional] state (inherited from stateful-visual-type type)
+      d) [optional] label (inherited from simple-field-type)
+      e) [optional] default-value
+      f) [optional] runtime-value
+
+    Elements of this type also have the following attributes:
+      a) name (inherited from simple-field-type)
+      b) [optional] field-layout-name (inherited from simple-field-type)
+      c) [optional] read-only
+        
+   </xs:documentation>
+  </xs:annotation>
+  <xs:complexContent>
+   <xs:extension base="simple-field-type">
+    <xs:sequence minOccurs="1" maxOccurs="1">
+     <xs:element minOccurs="0" maxOccurs="1" name="default-value" type="field-value-setter-type">
+      <xs:annotation>
+       <xs:documentation>
+        Field may have a default value.
+       </xs:documentation>
+      </xs:annotation>
+     </xs:element>
+     <xs:element minOccurs="0" maxOccurs="1" name="runtime-value">
+      <xs:annotation>
+       <xs:documentation>
+        Field may have a run-time calculated value.
+        Use this option when value of a field is dependent on value(s) of other field(s).
+        Runtime calculation is only triggered when there is a change of value in the field(s) which this runtime value references.
+       </xs:documentation>
+      </xs:annotation>
+      <xs:complexType>
+       <xs:choice>
+        <xs:element name='javascript' type='javascript-code-fragment'>
+         <xs:annotation>
+          <xs:documentation>
+           Arbitrary Javascript code fragment to be run in order to determine this field's value.
+           Uses the object returned by the fragment and converts it to its string representation.
+           NOTE: numerical calculations always result in a floating point number result. Use .toFixed(0) to convert result back to integer  
+          </xs:documentation>
+         </xs:annotation>
+        </xs:element>
+        <!-- Future code/language fragment types -->
+       </xs:choice>
+      </xs:complexType>
+     </xs:element>
+    </xs:sequence>
+    <xs:attribute name="readonly" type="xs:boolean" use="optional" default="false">
+     <xs:annotation>
+      <xs:documentation>
+       Declares that field is always readonly, i.e. change of the state will not affect this.
+      </xs:documentation>
+     </xs:annotation>
+    </xs:attribute>
+   </xs:extension>
+  </xs:complexContent>
+ </xs:complexType>
+ 
+ 
+ <xs:complexType name="input-text-field-type">
+  <xs:annotation>
+   <xs:documentation>
+    Elements of this type define a field that emulates an input text HTML element.
+
+    Elements of this type contain the following sub-elements:
+      a) [optional] title (inherited from visual-element-type type)
+      b) [optional] description (inherited from visual-element-type type)
+      c) [optional] state (inherited from stateful-visual-type type)
+      d) label (inherited from simple-field-type type)
+      e) [optional] default-value (inherited from field-type type)
+      f) [optional] runtime-value (inherited from field-type type)
+      g) [optional] validation-rules
+
+    Elements of this type also have the following attributes:
+      a) name (inherited from simple-field-type type)
+      b) [optional] simple-field-layout-name (inherited from field-type type)
+      c) [optional] read-only (inherited from field-type type)
+      d) size
+      e) [optional] max-length
+      f) [optional] value-type
+      g) [optional] format
+
+   </xs:documentation>
+  </xs:annotation>
+  <xs:complexContent>
+   <xs:extension base="field-type">
+    <xs:sequence>
+     <xs:element name='validation-rules' minOccurs="0">
+      <xs:annotation>
+       <xs:documentation>
+        Field may have a number of validation rules.
+        Validation is executed if:
+        (a) field is in state of REQUIRED (see state-declaration-element@required), or;
+        (b) field has some value
+      </xs:documentation>
+      </xs:annotation>
+      <xs:complexType>
+       <xs:sequence maxOccurs="unbounded">
+        <xs:choice>
+         <xs:element ref="must-have-value" />
+         <xs:element ref="equals" />
+         <xs:element ref="contains" />
+         <xs:element ref="not-contains" />
+         <xs:element ref="regex-match" />
+         <xs:element ref="regex-mismatch" />
+         <xs:element ref="min-length" />
+         <xs:element ref="max-length" />
+        </xs:choice>
+       </xs:sequence>
+      </xs:complexType>
+     </xs:element>
+    </xs:sequence>    
+    <xs:attribute name="max-length" type="xs:positiveInteger" use="optional">
+     <xs:annotation>
+      <xs:documentation>
+       This element specifies the value of the 'maxLength' attribute of the HTML "Input" element
+      </xs:documentation>
+     </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="size" type="xs:positiveInteger" use="required">
+     <xs:annotation>
+      <xs:documentation>
+       This element specifies the value of the 'size' attribute of the HTML "Input" element
+      </xs:documentation>
+     </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="value-type" type="input-text-value-type-list" use="optional" default="TEXT">
+     <xs:annotation>
+      <xs:documentation>
+        Type of value to be used for this field. If field has this attribute and field's value conversion operation fails, the field will contain "FERR(field value)"
+      </xs:documentation>
+     </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="format" type="tinyNonEmptyToken" use="optional">
+     <xs:annotation>
+      <xs:documentation>
+       The display format of this field's value
+       Format is only applied when value-type is INTEGER or FLOAT.
+       If 'format' attribute is not specified the following defaults apply:
+       - '#0' for INTEGER
+       - '#0.0' for FLOAT 
+      </xs:documentation>
+     </xs:annotation>
+    </xs:attribute>
+   </xs:extension>
+  </xs:complexContent>
+ </xs:complexType>
+
+ <xs:simpleType name="input-text-value-type-list">
+  <xs:annotation>
+   <xs:documentation>
+    Specifies list of value types available for use as value within input text field
+   </xs:documentation>
+  </xs:annotation>
+  <xs:restriction base="tinyNonEmptyToken">
+   <xs:enumeration value="TEXT">
+    <xs:annotation>
+     <xs:documentation>
+      The value is alphanumerical, using as java.lang.String for storage, evaluation and manipulation
+     </xs:documentation>
+    </xs:annotation>
+   </xs:enumeration>
+   <xs:enumeration value="INTEGER">
+    <xs:annotation>
+     <xs:documentation>
+      The value is an integer, using as java.lang.Integer for storage, evaluation and and manipulation
+     </xs:documentation>
+    </xs:annotation>
+   </xs:enumeration>
+   <xs:enumeration value="FLOAT">
+    <xs:annotation>
+     <xs:documentation>
+      The value is a float, using as java.lang.Double for storage, evaluation and and manipulation
+     </xs:documentation>
+    </xs:annotation>
+   </xs:enumeration>
+  </xs:restriction>
+ </xs:simpleType>
+
+ <xs:complexType name="text-area-field-type">
+  <xs:annotation>
+   <xs:documentation>
+    Elements of this type define a field that emulates an text area HTML element.
+
+    Elements of this type contain the following sub-elements:
+      a) [optional] title (inherited from visual-element-type type)
+      b) [optional] description (inherited from visual-element-type type)
+      c) [optional] state (inherited from stateful-visual-type type)
+      d) label (inherited from simple-field-type type)
+      e) [optional] default-value (inherited from field-type type)
+      f) [optional] runtime-value (inherited from field-type type)
+      g) [optional] validation-rules (inherited from field-type type)
+
+    Elements of this type also have the following attributes:
+      a) name (inherited from simple-field-type type)
+      b) [optional] field-layout-name (inherited from simple-field-type type)
+      c) [optional] read-only (inherited from field-type type)
+      d) rows
+      e) cols
+   </xs:documentation>
+  </xs:annotation>
+  <xs:complexContent>
+   <xs:extension base="field-type">
+    <xs:sequence>
+     <xs:element name='validation-rules' minOccurs="0">
+      <xs:annotation>
+       <xs:documentation>
+        Field may have a number of validation rules.
+        Validation is executed if:
+        (a) field is in state of REQUIRED (see state-declaration-element@required), or;
+        (b) field has some value
+      </xs:documentation>
+      </xs:annotation>
+      <xs:complexType>
+       <xs:sequence maxOccurs="unbounded">
+        <xs:choice>
+         <xs:element ref="must-have-value" />
+         <xs:element ref="contains" />
+         <xs:element ref="not-contains" />
+         <xs:element ref="regex-match" />
+         <xs:element ref="regex-mismatch" />
+         <xs:element ref="min-length" />
+         <xs:element ref="max-length" />
+        </xs:choice>
+       </xs:sequence>
+      </xs:complexType>
+     </xs:element>
+    </xs:sequence>    
+    <xs:attribute name="cols" type="xs:positiveInteger" use="required">
+     <xs:annotation>
+      <xs:documentation>
+       This element specifies the value of the 'cols' attribute of the HTML "textarea" element
+      </xs:documentation>
+     </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="rows" type="xs:positiveInteger" use="required">
+     <xs:annotation>
+      <xs:documentation>
+       This element specifies the value of the 'rows' attribute of the HTML "textarea" element
+      </xs:documentation>
+     </xs:annotation>
+    </xs:attribute>
+   </xs:extension>
+  </xs:complexContent>
+ </xs:complexType>
+
+ <xs:complexType name="file-attachment-field-type">
+  <xs:annotation>
+   <xs:documentation>
+    Elements of this type define a field that allows uploading of file attachments.
+
+    Elements of this type contain the following sub-elements:
+      a) [optional] title (inherited from visual-element-type type)
+      b) [optional] description (inherited from visual-element-type type)
+      c) [optional] state (inherited from stateful-visual-type type)
+      d) label (inherited from simple-field-type type)
+      e) [optional] validation-rules
+      f) [optional] upload-instructions 
+
+    Elements of this type also have the following attributes:
+      a) name (inherited from simple-field-type type)
+      b) [optional] field-layout-name (inherited from simple-field-type type)
+      c) [optional] restrict-to-file-types
+      d) [optional] maximum-file-size
+
+   </xs:documentation>
+  </xs:annotation>
+  <xs:complexContent>
+   <xs:extension base="simple-field-type">
+    <xs:sequence>
+     <xs:element name='validation-rules' minOccurs="0">
+      <xs:annotation>
+       <xs:documentation>
+        Field may have a number of validation rules.
+        Validation is executed if:
+        (a) field is in state of REQUIRED (see state-declaration-element@required), or;
+        (b) field has some value
+      </xs:documentation>
+      </xs:annotation>
+      <xs:complexType>
+       <xs:sequence maxOccurs="unbounded">
+        <xs:choice>
+         <xs:element ref="must-have-value" />
+         <xs:element ref="contains" />
+         <xs:element ref="not-contains" />
+         <xs:element ref="regex-match" />
+         <xs:element ref="regex-mismatch" />
+        </xs:choice>
+       </xs:sequence>
+      </xs:complexType>
+     </xs:element>
+     <xs:element minOccurs="0" maxOccurs="1" name="upload-instructions" default="Select file and click Upload button" type="mediumNonEmptyToken">
+      <xs:annotation>
+       <xs:documentation>
+        Information message that will be presented to a user during uploading process.
+        When client application runs on internet browser, HTML tags can also be inserted, 
+        use CDATA wrapper for this purpose. 
+       </xs:documentation>
+      </xs:annotation>
+     </xs:element>
+    </xs:sequence>
+    <xs:attribute name="restrict-to-file-types" default="" use="optional">
+     <xs:annotation>
+      <xs:documentation>
+       When defined, this element allows to specify a whitespace-separated list of file extensions that are allowed for uploading. If not defined, all file types are allowed.
+      </xs:documentation>
+     </xs:annotation>
+     <xs:simpleType>
+      <xs:list itemType="tinyNonEmptyToken" />
+     </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="maximum-file-size" default="200000" type="xs:positiveInteger" use="optional">
+     <xs:annotation>
+      <xs:documentation>
+       This element specifies a maximum file size in bytes that is allowed for uploading. Default value is 200,000 bytes.
+       This value may have a hard set limit, enforced by the back-end system. Check with your
+       system administrator the actual value of hard limit, see 'max-limit-for-file-attachment-size' entry in section 'smartform-domain'. 
+      </xs:documentation>
+     </xs:annotation>
+    </xs:attribute>
+   </xs:extension>
+  </xs:complexContent>
+ </xs:complexType>
+
+ <xs:complexType name="date-field-type">
+  <xs:annotation>
+   <xs:documentation>
+
+    Elements of this type define a field that allows specification of dates.
+
+    Elements of this type contain the following sub-elements:
+      a) [optional] title (inherited from visual-element-type type)
+      b) [optional] description (inherited from visual-element-type type)
+      c) [optional] state (inherited from stateful-visual-type type)
+      d) label (inherited from simple-field-type type)
+      e) [optional] default-value (inherited from field-type type)
+      f) [optional] runtime-value (inherited from field-type type)
+      g) [optional] validation-rules
+      h) [optional] format 
+      i) [optional] select-from
+      j) [optional] select-to
+
+    Elements of this type also have the following attributes:
+      a) name (inherited from simple-field-type type)
+      b) [optional] field-layout-name (inherited from simple-field-type type)
+      c) [optional] read-only (inherited from field-type type)
+      d) [optional] style
+
+   </xs:documentation>
+  </xs:annotation>
+  <xs:complexContent>
+   <xs:extension base="field-type">
+    <xs:sequence>
+     <xs:element name='validation-rules' minOccurs="0">
+      <xs:annotation>
+       <xs:documentation>
+        Field may have a number of validation rules.
+        Validation is executed if:
+        (a) field is in state of REQUIRED (see state-declaration-element@required), or;
+        (b) field has some value
+      </xs:documentation>
+      </xs:annotation>
+      <xs:complexType>
+       <xs:sequence maxOccurs="unbounded">
+        <xs:choice>
+         <xs:element ref="must-have-value" />
+         <xs:element ref="contains" />
+         <xs:element ref="not-contains" />
+         <xs:element ref="regex-match" />
+         <xs:element ref="regex-mismatch" />
+        </xs:choice>
+       </xs:sequence>
+      </xs:complexType>
+     </xs:element>
+     <xs:element minOccurs="0" maxOccurs="1" name="format">
+      <xs:annotation>
+       <xs:documentation>
+        Specifies the display format for the date field.
+        The presence and order of each of the sub-elements "year-element", "month-element" and "day-element" controls the display and order of each date component.
+        By default it will display a sequence of 3 date elements using 'SELECT' style:
+        - year (using "yyyy" specification)
+        - month (using "MM" specification)
+        - day (using "dd" specification)
+       </xs:documentation>
+      </xs:annotation>
+      <xs:complexType>
+       <xs:sequence minOccurs="0" maxOccurs="3">
+        <xs:annotation>
+         <xs:documentation>
+          Provides specification of display sequence for date elements
+         </xs:documentation>
+        </xs:annotation>
+        <xs:choice minOccurs="1" maxOccurs="3">
+         <xs:element name="year-element" type="date-field-component-type">
+          <xs:annotation>
+           <xs:documentation>
+            Specifies the format and position of the year component of the date 
+           </xs:documentation>
+          </xs:annotation>
+         </xs:element>
+         <xs:element name="month-element" type="date-field-component-type">
+          <xs:annotation>
+           <xs:documentation>
+            Specifies the format and position of the month component of the date 
+           </xs:documentation>
+          </xs:annotation>
+         </xs:element>
+         <xs:element name="day-element" type="date-field-component-type">
+          <xs:annotation>
+           <xs:documentation>
+            Specifies the format and position of the day component of the date 
+           </xs:documentation>
+          </xs:annotation>
+         </xs:element>
+        </xs:choice>
+        <xs:element name="select-from" type="date-bound-type" minOccurs="0">
+         <xs:annotation>
+          <xs:documentation>
+           Defines the date to make a selection from, expressed in yyyy-mm-dd format.
+           If attribute 'timestamp' is not defined, the current timestamp will be used.
+           For xs:date types use, yyyy-mm-dd format.
+          </xs:documentation>
+         </xs:annotation>
+        </xs:element>
+        <xs:element name="select-to" type="date-bound-type" minOccurs="0">
+         <xs:annotation>
+          <xs:documentation>
+           Defines the date to make a selection from, expressed in yyyy-mm-dd format.
+           If attribute 'timestamp' is not defined, the current timestamp will be used.
+           For xs:date types use, yyyy-mm-dd format.
+          </xs:documentation>
+         </xs:annotation> 
+        </xs:element>
+       </xs:sequence>
+       <xs:attribute name="style" type="date-field-style-list" use="optional">
+        <xs:annotation>
+         <xs:documentation>
+          Style of display for this date field. Currently only the "SELECT" style is implemented.
+         </xs:documentation>
+        </xs:annotation>
+       </xs:attribute>
+      </xs:complexType>
+     </xs:element>
+    </xs:sequence>
+   </xs:extension>
+  </xs:complexContent>
+ </xs:complexType> 
+ 
+ <xs:complexType name="date-field-component-type">
+  <xs:attribute name="format-spec" type="tinyNonEmptyToken">
+   <xs:annotation>
+    <xs:documentation>
+     Provides output specification for an appropriate date element.
+     This format specification uses java.textDateFormat to for naming labels.
+     The most obvious use is 'MM' for digital display of months, and 'MMM' for textual
+     display of minths, i.e. "Jan", "Dec", etc.
+     If attribute 'format-spec' is not defined the default values are 'yyyy','MM','dd'.
+    </xs:documentation>
+   </xs:annotation>
+  </xs:attribute>
+  <xs:attribute name="title" type="tinyNonEmptyToken" use="optional">
+   <xs:annotation>
+    <xs:documentation>
+     Provides title for an appropriate date element.
+     If date-field-type@style is "SELECT", value of title will also be displayed as a label when option is not selected.
+     When attribute 'title' is not defined, values "year","month","day" will be assigned as titles of the corresponding date components.
+    </xs:documentation>
+   </xs:annotation>
+  </xs:attribute>
+ </xs:complexType>
+ <xs:simpleType name="date-field-style-list">
+  <xs:annotation>
+   <xs:documentation>
+    Specifies list of styles available for the display of date element
+   </xs:documentation>
+  </xs:annotation>
+  <xs:restriction base="tinyNonEmptyToken">
+   <xs:enumeration value="SELECT">
+    <xs:annotation>
+     <xs:documentation>
+      Possible values are presented as a drop-down list of options for each of the date element,
+     </xs:documentation>
+    </xs:annotation>
+   </xs:enumeration>
+   <!--xs:enumeration value="SINGLE_TEXT">
+    <xs:annotation>
+     <xs:documentation>
+      Date is presented as a single text field for all date elements
+     </xs:documentation>
+    </xs:annotation>
+   </xs:enumeration>
+   <xs:enumeration value="MULTI_TEXT">
+    <xs:annotation>
+     <xs:documentation>
+      Date is presented as a sequence of text fields, one for every date element
+     </xs:documentation>
+    </xs:annotation>
+   </xs:enumeration-->
+  </xs:restriction>
+ </xs:simpleType>
+ 
+ <xs:complexType name='date-bound-type'>
+  <xs:annotation>
+   <xs:documentation>
+    Elements of this type define the boundary (upper/lower) of a date range
+   </xs:documentation>
+  </xs:annotation>
+  <xs:attribute name="timestamp" type="xs:date" use="optional">
+   <xs:annotation>
+    <xs:documentation>
+     Defines the date to make a selection from, expressed in yyyy-mm-dd format.
+     If attribute 'timestamp' is not defined, the current timestamp will be used.
+     For xs:date types use, yyyy-mm-dd format.
+    </xs:documentation>
+   </xs:annotation>
+  </xs:attribute>
+  <xs:attribute name="offset" type="xs:duration" use="optional">
+   <xs:annotation>
+    <xs:documentation>
+     Defines the offset from the defined timestamp date.
+     If attribute 'timestamp' is not defined, no offset will be applied.
+     If attribute 'timestamp' is defined, the following calendar rolling operation will be applied:
+     1) Calendar made from timestamp value will be rolled by the number of days defined in duration value
+     2) Resulting calendar value will be rolled by the number of months defined in duration value
+     3) Resulting calendar value will be rolled by the number of years defined in duration value.
+     E.g.:
+      - the following specification {timestamp="2010-03-01" offset="P1Y"} will result in 2011-03-01
+      - the following specification {timestamp="2010-03-01" offset="-P1Y"} will result in 2009-03-01
+      - the following specification {timestamp="2010-03-01" offset="P0Y2M1D"} will result in 2010-05-02
+    </xs:documentation>
+   </xs:annotation>
+  </xs:attribute>
+ </xs:complexType>
+
+ 
+ <xs:complexType name="choice-field-type">
+  <xs:annotation>
+   <xs:documentation>
+    Elements of this type define a field that emulates one of the following HTML element types: Radio Group, Checkbox Group or Select Menu.
+
+    Elements of this type contain the following sub-elements:
+      a) [optional] title (inherited from visual-element-type type)
+      b) [optional] description (inherited from visual-element-type type)
+      c) [optional] state (inherited from stateful-visual-type type)
+      d) label (inherited from simple-field-type type)
+      e) [optional] default-value (inherited from field-type type)
+      f) [optional] runtime-value (inherited from field-type type)
+      g) [optional] validation-rules
+      h) options 
+
+    Elements of this type also have the following attributes:
+      a) name (inherited from simple-field-type type)
+      b) [optional] field-layout-name (inherited from simple-field-type type)
+      c) [optional] read-only (inherited from field-type type)
+      c) [optional] add-blank-option
+
+   </xs:documentation>
+  </xs:annotation>
+  <xs:complexContent>
+   <xs:extension base="field-type">
+    <xs:sequence>
+     <xs:element name='validation-rules' minOccurs="0">
+      <xs:annotation>
+       <xs:documentation>
+        Field may have a number of validation rules.
+        Validation is executed if:
+        (a) field is in state of REQUIRED (see state-declaration-element@required), or;
+        (b) field has some value
+      </xs:documentation>
+      </xs:annotation>
+      <xs:complexType>
+       <xs:sequence maxOccurs="unbounded">
+        <xs:choice>
+         <xs:element ref="must-have-value" />
+         <xs:element ref="equals" />
+         <xs:element ref="contains" />
+         <xs:element ref="not-contains" />
+         <xs:element ref="regex-match" />
+         <xs:element ref="regex-mismatch" />
+        </xs:choice>
+       </xs:sequence>
+      </xs:complexType>
+     </xs:element>
+     <xs:element ref="choice-field-options" minOccurs="1" maxOccurs="1">
+      <xs:annotation>
+       <xs:documentation>
+        A staticly defined list of options for this choice element
+       </xs:documentation>
+      </xs:annotation>
+     </xs:element>
+    </xs:sequence>
+    <xs:attribute name="style" type="choice-field-style-list" use="required">
+     <xs:annotation>
+      <xs:documentation>
+       Style of display for this choice element
+      </xs:documentation>
+     </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="add-blank-option" type="xs:boolean" use="optional" default="true">
+     <xs:annotation>
+      <xs:documentation>
+		Automatically adds blank option when style is SELECT.
+		This setting is ignored for other styles.
+      </xs:documentation>
+     </xs:annotation>
+    </xs:attribute>
+   </xs:extension>
+  </xs:complexContent>
+ </xs:complexType>
+
+
+
+ <xs:element name="choice-field-options" abstract="true" type="choice-field-options-type">
+  <xs:annotation>
+   <xs:documentation>
+    [Abstract] head element of the choice field options. Exists solely for the purpose of being the head of a substition group.
+   </xs:documentation>
+  </xs:annotation>
+ </xs:element>
+ 
+ <xs:element name="constant-options" substitutionGroup="choice-field-options" type="choice-field-constant-options-type">
+  <xs:annotation>
+   <xs:documentation>
+    TODO
+   </xs:documentation>
+  </xs:annotation>
+ </xs:element>
+
+
+ <xs:complexType name="choice-field-options-type" abstract="true">
+  <xs:annotation>
+   <xs:documentation>
+     TODO
+   </xs:documentation>
+  </xs:annotation>
+ </xs:complexType>
+
+ <xs:complexType name="choice-field-constant-options-type">
+  <xs:complexContent>
+   <xs:extension base="choice-field-options-type">
+    <xs:sequence>
+     <xs:element name="option" minOccurs="1" maxOccurs="unbounded">
+      <xs:complexType>
+       <xs:simpleContent>
+        <xs:extension base="mediumToken">
+         <xs:attribute name="value" type="shortToken" use="required">
+          <xs:annotation>
+           <xs:documentation>
+             Value to be submitted to when user selected this option. Also used for label if label attribute is not specified.
+           </xs:documentation>
+          </xs:annotation>
+         </xs:attribute>        
+       </xs:extension>
+      </xs:simpleContent>
+
+
+<!-- Works except no length limit for option text. How to apply this? 
+       <xs:simpleContent>
+        <xs:extension base="xs:token">
+         <xs:attribute name="value" type="shortNonEmptyToken" use="required">
+          <xs:annotation>
+           <xs:documentation>
+             Value to be submitted to when user selected this option. Also used for label if label attribute is not specified.
+           </xs:documentation>
+          </xs:annotation>
+         </xs:attribute>        
+       </xs:extension>
+      </xs:simpleContent>
+ -->
+ <!--        
+   <xs:attribute name="label" type="xs:token" use="optional">
+        <xs:annotation>
+         <xs:documentation>
+           Label to be displayed to user for this option
+         </xs:documentation>
+        </xs:annotation>
+       </xs:attribute> -->
+
+      </xs:complexType>
+     </xs:element>  
+    </xs:sequence>
+   </xs:extension>
+  </xs:complexContent>
+ </xs:complexType>
+ 
+ 
+ <xs:simpleType name="choice-field-style-list">
+  <xs:annotation>
+   <xs:documentation>
+    Specifies list of styles available for display of choice field element
+   </xs:documentation>
+  </xs:annotation>
+     <xs:restriction base="tinyNonEmptyToken">
+       <xs:enumeration value="SELECT">
+        <xs:annotation>
+         <xs:documentation>
+          Choices are presented as a drop-down list, (single choice selection)
+         </xs:documentation>
+        </xs:annotation>
+       </xs:enumeration>
+       <xs:enumeration value="RADIO">
+        <xs:annotation>
+         <xs:documentation>
+          Choices are presented as radio buttons, (single choice selection)
+         </xs:documentation>
+        </xs:annotation>
+       </xs:enumeration>
+       <xs:enumeration value="CHECKBOX">
+        <xs:annotation>
+         <xs:documentation>
+          Choices are presented as check boxes, (multiple choice selections)
+         </xs:documentation>
+        </xs:annotation>
+       </xs:enumeration>
+  </xs:restriction>
+ </xs:simpleType>
+
+
+
+ <xs:complexType name="hidden-field-type">
+  <xs:annotation>
+   <xs:documentation>
+    This element provides definition of a field that is never exposed to the user.
+    Note: it also does not appear as HTML input hidden type element.
+   </xs:documentation>
+  </xs:annotation>
+  <xs:complexContent>
+   <xs:annotation>
+    <xs:documentation>
+     Hidden element consists of:
+     b) title (ignored), from visual-element
+     c) description (ignored), from visual-element
+     a) state rules (optional), from stateful-element
+     e) label (ignored), from simple-field-type
+     h) 'name' attribute (required), from simple-field-type
+    </xs:documentation>
+   </xs:annotation>
+   <xs:extension base="field-type" />
+  </xs:complexContent>
+ </xs:complexType>
+
+
+ 
+ <xs:complexType name="field-value-setter-type">
+  <xs:annotation>
+   <xs:documentation>
+    TODO
+   </xs:documentation>
+  </xs:annotation>
+  <xs:choice minOccurs="1" maxOccurs="1">
+   <xs:element name="constant" type="shortToken" minOccurs="1" maxOccurs="1" />
+   <xs:element name="javascript" type="javascript-code-fragment" minOccurs="1" maxOccurs="1">
+    <xs:annotation>
+     <xs:documentation>
+      Arbitrary Javascript code fragment to be run in order to determine this field's value.
+      Uses the object returned by the fragment and converts it to its string representation.
+      NOTE: numerical calculations always result in a floating point number result. Use .toFixed(0) to convert result back to integer  
+     </xs:documentation>
+    </xs:annotation>
+   </xs:element>
+  </xs:choice>    
+ </xs:complexType>
+ 
+ <xs:complexType name="validation-rule-type" abstract="true">
+  <xs:simpleContent>
+   <xs:extension base="xs:token"><!-- can't use shortNonEmptyToken etc as base because its' minLength facet would conflict with derived type length facets -->
+    <xs:attribute name="error-message" use="required" type="shortNonEmptyToken">
+     <xs:annotation>
+      <xs:documentation>
+       Message to be presented when field does not pass this validation rule
+      </xs:documentation>
+     </xs:annotation>
+    </xs:attribute>
+   </xs:extension>
+  </xs:simpleContent>
+ </xs:complexType>
+
+ <xs:element name="validation-rule" type="validation-rule-type" abstract="true">
+  <xs:annotation>
+   <xs:documentation>
+    [abstract] Defined as head of validation-rule substitutionGroup
+   </xs:documentation>
+  </xs:annotation>
+ </xs:element>
+
+ <xs:complexType name="content-based-validation-rule-type">
+  <xs:simpleContent>
+   <xs:restriction base="validation-rule-type">
+    <xs:simpleType>
+     <xs:restriction base="shortNonEmptyToken" />
+    </xs:simpleType>
+   </xs:restriction>
+  </xs:simpleContent>
+ </xs:complexType>
+ 
+ <xs:element name="contains" type="content-based-validation-rule-type" substitutionGroup="validation-rule">
+  <xs:annotation>
+   <xs:documentation>
+    Validation fails when this element's content is not present (ie. not a substring) of the field's content
+   </xs:documentation>
+  </xs:annotation>
+ </xs:element>
+
+ <xs:element name="not-contains" type="content-based-validation-rule-type" substitutionGroup="validation-rule">
+  <xs:annotation>
+   <xs:documentation>
+    Validation fails when this element's content is present (ie. is a substring) of the field's content
+   </xs:documentation>
+  </xs:annotation>
+ </xs:element>
+
+ <xs:element name="equals" type="content-based-validation-rule-type" substitutionGroup="validation-rule">
+  <xs:annotation>
+   <xs:documentation>
+    Validation fails when this element's content does not exactly match the field's content
+   </xs:documentation>
+  </xs:annotation>
+ </xs:element>
+
+ <xs:element name="not-equals" type="content-based-validation-rule-type" substitutionGroup="validation-rule">
+  <xs:annotation>
+   <xs:documentation>
+    Validation fails when the specified content exactly matches the field's content
+   </xs:documentation>
+  </xs:annotation>
+ </xs:element>
+
+ <xs:element name="regex-match" type="content-based-validation-rule-type" substitutionGroup="validation-rule">
+  <xs:annotation>
+   <xs:documentation>
+    Validation fails when the specified regular expression is not matched in the field's content.
+   </xs:documentation>
+  </xs:annotation>
+ </xs:element>
+
+ <xs:element name="regex-mismatch" type="content-based-validation-rule-type" substitutionGroup="validation-rule">
+  <xs:annotation>
+   <xs:documentation>
+    Validation fails when the specified regular expression is matched in the field's content
+   </xs:documentation>
+  </xs:annotation>
+ </xs:element>
+
+ <xs:complexType name="no-content-validation-rule-type">
+  <xs:simpleContent>
+   <xs:restriction base="validation-rule-type">
+    <xs:maxLength value="0" />
+   </xs:restriction>
+  </xs:simpleContent>
+ </xs:complexType>
+ 
+
+ <!-- xs:element name="must-be-empty" substitutionGroup="validation-rule" type="no-content-validation-rule-type">
+  <xs:annotation>
+   <xs:documentation>
+    Field is valid when the number of characters in the field being validated equals zero. Uses java.lang.String.length() method.
+   </xs:documentation>
+  </xs:annotation>
+ </xs:element--> 
+  
+ <xs:element name="must-have-value" substitutionGroup="validation-rule" type="no-content-validation-rule-type">
+  <xs:annotation>
+   <xs:documentation>
+    Field is valid when the number of characters in the field's value is more than zero. Uses java.lang.String.length() method.
+   </xs:documentation>
+  </xs:annotation>
+ </xs:element> 
+ 
+ <xs:complexType name="computed-value-validation-rule-type">
+  <xs:annotation>
+   <xs:documentation>
+    Validation Rule type which accepts a constant integer value as an attribute
+   </xs:documentation>
+  </xs:annotation>
+  <xs:complexContent>
+   <xs:extension base="no-content-validation-rule-type">
+    <xs:attribute name="value" type="xs:integer" use="required">
+     <xs:annotation>
+      <xs:documentation>
+       Value to be used for this validation-rule-type
+      </xs:documentation>
+     </xs:annotation>
+    </xs:attribute>
+   </xs:extension>
+  </xs:complexContent>
+ </xs:complexType>
+  
+ <xs:element name="min-length" substitutionGroup="validation-rule" type="computed-value-validation-rule-type">
+   <xs:annotation>
+   <xs:documentation>
+    Validation fails when the number of characters in the field being validated is &lt; specified value. Uses java.lang.String.length() method.
+   </xs:documentation>
+  </xs:annotation>
+ </xs:element>
+ 
+ <xs:element name="max-length" substitutionGroup="validation-rule" type="computed-value-validation-rule-type">
+  <xs:annotation>
+   <xs:documentation>
+    Validation fails when the number of characters in the field being validated is &gt; specified value. Uses java.lang.String.length() method.
+   </xs:documentation>
+  </xs:annotation>
+ </xs:element>
+ 
+ <xs:element name="custom-class" substitutionGroup="validation-rule" type="custom-class-validation-rule-type">
+  <xs:annotation>
+   <xs:documentation>
+    Validation fails when method isValueValid(...) of a specified custom class returns false.
+   </xs:documentation>
+  </xs:annotation>
+ </xs:element>
+ 
+ <xs:complexType name="custom-class-validation-rule-type">
+  <xs:annotation>
+   <xs:documentation><![CDATA[
+    Validation rule that uses a custom Java class that implements 
+    com.myoffice24x7.smartform.domain.runtime.common.CustomClassFieldValidatorInterface:
+    public interface CustomClassFieldValidatorInterface {
+     public boolean isValueValid(
+      String principal,
+      String fieldValue, 
+      java.util.Map<String,String> relatedFields);
+    }
+						
+    Interface CustomClassFieldValidatorInterface is in package smartform-runtime-client-local-interface.jar which is located in
+    $APP_SERVER/modules/com/myoffice24x7/smartforms/common/main/ directory.
+							
+    Implementations of this interface shall be placed to a class path of SmartForms Application Server(s).
+    If class can not be resolved at run-time, the returned value is false. 
+							
+    Below is an example of using an existing in-built class ValueIsHelloWorldValidator:
+    <custom-class 
+     classname="com.myoffice24x7.smartform.domain.runtime.session.definition.impl.validator.field.impl.ValueIsHelloWorldValidator" 
+     related-field-list="licence.type" 
+     error-message="Value is not 'Hello World'"/>
+								
+    Source code for class ValueIsHelloWorldValidator is below:
+    ------------------------------------------------------------
+    package com.myoffice24x7.smartform.domain.runtime.session.definition.impl.validator.field.impl;	
+    import com.myoffice24x7.smartform.domain.runtime.common.CustomClassFieldValidatorInterface;
+							
+    public class ValueIsHelloWorldValidator implements CustomClassFieldValidatorInterface {	
+     @Override
+     public boolean isValueValid(String principal, String fieldValue,
+      java.util.Map<String, String> relatedFieldValues) {
+      return (fieldValue.compareTo("Hello World") == 0);
+     }
+    }
+    ------------------------------------------------------------
+   ]]></xs:documentation>
+  </xs:annotation>
+  <xs:complexContent>
+   <xs:extension base="no-content-validation-rule-type">
+    <xs:attribute name="classname" type="mediumNonEmptyToken" use="required">
+     <xs:annotation>
+      <xs:documentation>
+       Full name of a java class to be used for field validation.      
+      </xs:documentation>
+     </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="related-field-list" type="longNonEmptyToken" use="optional">
+     <xs:annotation>
+      <xs:documentation>
+        An optional comma-separated list of other field names that may also be required for evaluation purposes.
+     </xs:documentation>
+    </xs:annotation>
+    </xs:attribute>
+   </xs:extension>
+  </xs:complexContent>
+ </xs:complexType>
+
+ <xs:complexType name="state-declaration-element">
+  <xs:annotation>
+   <xs:documentation>
+    This is a declaration/definition of a state for a stateful element.
+    Stateful element can enter only one state at a time.
+   </xs:documentation>
+  </xs:annotation>
+  <xs:attribute name="name" type="tinyNonEmptyToken" use="required">
+   <xs:annotation>
+    <xs:documentation>
+     Each state must have a unique name
+    </xs:documentation>
+   </xs:annotation>
+  </xs:attribute>
+  <xs:attribute name="hidden" type="xs:boolean" use="required">
+   <xs:annotation>
+    <xs:documentation>
+     Defines whether the stateful element shall become hidden if in this state
+    </xs:documentation>
+   </xs:annotation>
+  </xs:attribute>
+  <xs:attribute name="disabled" type="xs:boolean" use="required">
+   <xs:annotation>
+    <xs:documentation>
+     Defines whether the stateful element shall become disabled for user input in this state
+    </xs:documentation>
+   </xs:annotation>
+  </xs:attribute> 
+  <xs:attribute name="required" type="xs:boolean" use="required">
+   <xs:annotation>
+    <xs:documentation>
+     Defines whether the stateful element must have a value in order to pass validation when in this state.
+     This attribute comes to effect only when: 
+     @hidden=false and 
+     @disabled=false and 
+     @readonly=false
+    </xs:documentation>
+   </xs:annotation>
+  </xs:attribute>
+  <xs:attribute name="readonly" type="xs:boolean" use="optional" default="false">
+   <xs:annotation>
+    <xs:documentation>
+     Defines whether the stateful element shall become readonly for input 
+     when entering this state.
+     This attribute comes to effect only when:
+     @hidden=false and 
+     @disabled=false.
+     For field elements, @readonly=true will override this state
+    </xs:documentation>
+   </xs:annotation>
+  </xs:attribute>
+ </xs:complexType>
+
+ <xs:complexType name="state-precedence-rule-element">
+  <xs:annotation>
+   <xs:documentation>
+    Recalculates the state of the stateful child element based on 
+    the state of a its' parent element.
+   </xs:documentation>
+  </xs:annotation>
+  <xs:sequence minOccurs="1" maxOccurs="1">
+   <xs:element name="parent-state-name" type="tinyToken">
+    <xs:annotation>
+     <xs:documentation>
+      Precendence will be calculated when name of a parent element matches value of this element,
+      must refer to a declared state,  see states/state/@name 
+     </xs:documentation>
+    </xs:annotation>
+   </xs:element>
+   <xs:element name="child-state-name-pattern" type="shortToken">
+    <xs:annotation>
+     <xs:documentation>
+      Regular expression-based value of the name of a child element, e.g.
+      ^([a-zA-Z]*)$ - if child's state is a non-white space character string, or
+      ^()$ - if child state is not defined, i.e. empty;
+      
+      This evaluation uses the java.util.regex.Pattern(regex, string) method.
+      The provided regular expression shall pass the java.util.regex.Pattern.compile(regex) validation.
+     </xs:documentation>
+    </xs:annotation>
+   </xs:element>
+   <xs:element name="derived-state-name" type="tinyNonEmptyToken">
+    <xs:annotation>
+     <xs:documentation>
+      New state name given to the child element,
+      must refer to a declared state,  see states/state/@name 
+     </xs:documentation>
+    </xs:annotation>
+   </xs:element>
+  </xs:sequence>
+ </xs:complexType>
+ 
+ <xs:complexType name="visual-element-type" abstract="true">
+  <xs:annotation>
+   <xs:documentation>
+    Specifies elements and attributes that are common to all visual elements.
+     Visual element consists of:
+     a) state rules (optional), from stateful-visual-type
+     b) title (optional)
+     b) description (optional)
+    </xs:documentation>
+   </xs:annotation>
+   <xs:sequence>
+    <xs:element name="title" type="mediumNonEmptyToken" minOccurs="0">
+     <xs:annotation>
+      <xs:documentation>
+       Visual element may have a title.
+      </xs:documentation>
+     </xs:annotation>
+    </xs:element>
+    <xs:element name="description" type="longNonEmptyToken" minOccurs="0">
+     <xs:annotation>
+      <xs:documentation>
+       Visual element may have a description.
+      </xs:documentation>
+     </xs:annotation>
+    </xs:element> 
+  </xs:sequence>
+ </xs:complexType> <!--
+ <xs:complexType name="hint-element">
+  <xs:annotation>
+   <xs:documentation>
+    Represents hint message
+   </xs:documentation>
+  </xs:annotation>
+    <xs:simpleContent>
+      <xs:extension base="xs:token">
+    <xs:attribute name="display-style" type="hint-display-styles" use="optional" default="PERMANENT"/> 
+   </xs:extension>
+  </xs:simpleContent>
+ </xs:complexType>
+ <xs:simpleType name="hint-display-styles">
+  <xs:annotation>
+   <xs:documentation>
+    Lists styles of hint display
+   </xs:documentation>
+  </xs:annotation>
+     <xs:restriction base="xs:token">
+       <xs:enumeration value="PERMANENT">
+        <xs:annotation>
+         <xs:documentation>
+          Hint is displayed permanently when visual element is present
+         </xs:documentation>
+        </xs:annotation>
+       </xs:enumeration>
+       <xs:enumeration value="ON_FOCUS">
+        <xs:annotation>
+         <xs:documentation>
+          Hint is displayed when visual element or any of its children have focus
+         </xs:documentation>
+        </xs:annotation>
+       </xs:enumeration>
+  </xs:restriction>
+ </xs:simpleType> -->
+ 
+ <xs:complexType name="stateful-visual-type" abstract="true">
+  <xs:annotation>
+   <xs:documentation>
+    Specifies elements and attributes that are common to all stateful elements.
+   </xs:documentation>
+  </xs:annotation>
+  <xs:complexContent>
+   <xs:extension base="visual-element-type">
+    <xs:sequence minOccurs="0">
+     <xs:element name="state-rules" minOccurs="0" maxOccurs="1">
+      <xs:annotation>
+       <xs:documentation>
+        State of an element is determined by sequential processing of each declared 'state-rule' element.
+        Processing stops at the first state-rule which evaluates to true.
+        The state-rule which processing stops at determines the state of the containing stateful element.
+        If there are no state rules or none of the state rules evaluate to true, the state specified by the default-state element is used.
+       </xs:documentation>
+      </xs:annotation>
+      <xs:complexType>
+       <xs:sequence>
+        <xs:element name="conditional-state" type="conditional-state-type" minOccurs="0" maxOccurs="unbounded">
+         <xs:annotation>
+          <xs:documentation>
+           Defines a set of conditional rules requiring evaluation to determine if the state named by this element should be applied to the containing smartform stateful element
+          </xs:documentation>
+         </xs:annotation>
+        </xs:element>
+        <xs:element name="default-state" type="default-state-type" minOccurs="1" maxOccurs="1">
+         <xs:annotation>
+          <xs:documentation>
+           The default state rule should no other states rules apply
+          </xs:documentation>
+         </xs:annotation>
+        </xs:element>
+       </xs:sequence>
+      </xs:complexType>
+     </xs:element>
+    </xs:sequence>
+   </xs:extension>
+  </xs:complexContent>
+ </xs:complexType>
+
+ <xs:complexType name="default-state-type">
+  <xs:annotation>
+   <xs:documentation>
+    Elements of this type define the default state for a smartform stateful element should no other state-rules be specifeid or evaluate to 'true' 
+   </xs:documentation>
+  </xs:annotation>
+  <xs:attribute name="state-name" use="required" type="tinyNonEmptyToken">
+   <xs:annotation>
+    <xs:documentation>
+     Name of a declared state, see //states/state-declaration-element
+    </xs:documentation>
+   </xs:annotation>
+  </xs:attribute>
+ </xs:complexType>
+ 
+
+ <xs:complexType name="conditional-state-type">
+  <xs:annotation>
+   <xs:documentation>
+    Elements of this type contain a set of conditional rules requiring evaluation to determine if the state identified by the state-name attribute should be applied to the containing smartform stateful element
+   </xs:documentation>
+  </xs:annotation>
+  <xs:complexContent>
+   <xs:extension base="default-state-type">
+    <xs:choice minOccurs="1" maxOccurs="1">
+     <xs:element name="condition-set" type="conditions-set-type" />
+     <!--xs:element ref="condition" /-->
+    </xs:choice>
+   </xs:extension>
+  </xs:complexContent>
+ </xs:complexType>
+
+ 
+ <xs:complexType name="conditions-set-type">
+  <xs:annotation>
+   <xs:documentation>
+    The rule-set-type allows to derive result from multiple rules.
+    It may contain any combination of:
+    1) rules, see rule-element, e.g.:
+     - field-has-value
+     - field-has-no-value
+     - field-is-empty
+     - see elements where substitutionGroup="validation-rule"
+    2) rule groups, see rule-set-type
+   </xs:documentation>
+  </xs:annotation>
+  <xs:choice minOccurs="1" maxOccurs="unbounded">
+   <xs:element ref="condition">
+    <xs:annotation>
+     <xs:documentation>
+      Pre-defined conditional test to be evaluated in order to determine this state's applicability.
+     </xs:documentation>
+    </xs:annotation>
+   </xs:element>
+   <!--xs:element name="javascript" type="javascript-code-fragment">
+    <xs:annotation>
+     <xs:documentation><![CDATA[
+      Arbitrary Javascript code fragment to be evaluated in order to determine this state's applicability.
+      Uses the smartformResult variable evaluated within the fragment and converts it to its boolean representation.  ]]>  
+     </xs:documentation>
+    </xs:annotation>    
+   </xs:element-->
+   <xs:element name="condition-set" type="conditions-set-type">
+    <xs:annotation>
+     <xs:documentation>
+      Set of state rules to be evaluated as a whole to determine this state's applicability.
+     </xs:documentation>
+    </xs:annotation>
+   </xs:element>
+  </xs:choice>
+  <xs:attribute name="operator" type="rule-set-operator-list" use="optional" default="OR">
+   <xs:annotation>
+    <xs:documentation>
+     All rules within the set are processed using this logical operator
+    </xs:documentation>
+   </xs:annotation>
+  </xs:attribute>
+ </xs:complexType>
+ 
+ <xs:simpleType name="rule-set-operator-list">
+  <xs:annotation>
+   <xs:documentation>
+    The following logical operators are allowed for 
+    the processing of rule elements in a group:
+    OR, at least one rule shall return positive result
+    AND, all rules shall return positive resuls
+   </xs:documentation>
+  </xs:annotation>
+     <xs:restriction base="tinyNonEmptyToken">
+       <xs:enumeration value="OR"/>
+       <xs:enumeration value="AND"/>
+       </xs:restriction>
+ </xs:simpleType>
+ 
+ <xs:element name="condition" abstract="true" type="state-rule-type">
+  <xs:annotation>
+   <xs:documentation>
+   [Abstract] Head of the substitutionGroup for types derived from "state-rule-type"
+   </xs:documentation>
+  </xs:annotation>
+ </xs:element>
+ 
+ <xs:complexType name="state-rule-type" abstract="true">
+  <xs:annotation>
+   <xs:documentation>
+    [Abstract] Parent type of all state dependency rule types.
+   </xs:documentation>
+  </xs:annotation>
+  <xs:simpleContent>
+   <xs:extension base="xs:token"><!-- can't use shortNonEmptyToken etc because minLength facet would conflict with derived type length facets -->
+    <xs:attribute name="field-name" type="xs:IDREF" use="required">
+     <xs:annotation>
+      <xs:documentation>
+       State rules must refer to the name of a declared field
+      </xs:documentation>
+     </xs:annotation>
+    </xs:attribute>
+    
+   </xs:extension>
+  </xs:simpleContent>
+ </xs:complexType>
+
+ <xs:complexType name="content-based-state-rule-type">
+  <xs:simpleContent>
+   <xs:restriction base="state-rule-type">
+    <xs:minLength value="1" />
+   </xs:restriction>
+  </xs:simpleContent>
+ </xs:complexType>
+
+ <xs:complexType name="no-content-state-rule-type">
+  <xs:simpleContent>
+   <xs:restriction base="state-rule-type">
+    <xs:maxLength value="0" />
+   </xs:restriction>
+  </xs:simpleContent>
+ </xs:complexType>
+ 
+ <xs:element name="field-has-no-value" substitutionGroup="condition" type="no-content-state-rule-type">
+  <xs:annotation>
+   <xs:documentation>
+    Returns positive result when field value is empty, i.e. null/not specified or has zero length
+   </xs:documentation>
+  </xs:annotation>
+ </xs:element>
+ 
+
+ <xs:element name="field-has-value" substitutionGroup="condition" type="no-content-state-rule-type">
+  <xs:annotation>
+   <xs:documentation>
+    Returns positive result when field value has some value, i.e. opposite to has-no-value-field-rule.
+    Evaluation result depends on field type, e.g. input-text-field will return positive result if
+    field value length is more than zero.
+   </xs:documentation>
+  </xs:annotation>
+ </xs:element>
+
+<!-- 
+ <xs:complexType name="field-value-state-rule-type">
+  <xs:annotation>
+   <xs:documentation>
+    Base element for rules when field value is compared to a specified value
+   </xs:documentation>
+  </xs:annotation>
+  <xs:complexContent>
+   <xs:extension base="field-state-rule-type">
+    <xs:attribute name="value" type="xs:token" use="required">
+     <xs:annotation>
+      <xs:documentation>
+       Value to be compared to field's value
+      </xs:documentation>
+     </xs:annotation>
+    </xs:attribute>
+   </xs:extension>
+  </xs:complexContent>
+ </xs:complexType>
+ -->
+ <xs:element name="field-not-equal" substitutionGroup="condition" type="content-based-state-rule-type">
+  <xs:annotation>
+   <xs:documentation>
+    Returns 'true' when named field's value does not match the content of the 'value' attribute
+   </xs:documentation>
+  </xs:annotation>
+ </xs:element>
+ <xs:element name="field-equal" substitutionGroup="condition" type="content-based-state-rule-type">
+  <xs:annotation>
+   <xs:documentation>
+    Returns 'true' when named field's value exactly matches the content of the 'value' attribute
+   </xs:documentation>
+  </xs:annotation>
+ </xs:element>
+
+ <xs:element name="field-contains" substitutionGroup="condition" type="content-based-state-rule-type">
+  <xs:annotation>
+   <xs:documentation>
+    Returns 'true' when named field's value contains value specified in 'value' attribute. 
+    Behavior for various field types:
+    1) INTEGER - uses Java.lang.String.contains(value) method for the string representation of an integer value, eg. 125 contains '2' is true
+    2) FLOAT - uses Java.lang.String.contains(value) method for the string representation of a float value, eg. 125.075 contains '07' is true
+    3) file-attachment-field - uses Java.lang.String.contains(value) method for the string representation of a file name value, eg. 'my-resume.pdf' contains '.pdf' is true
+    4) TEXT - uses Java.lang.String.contains(value) method
+    5) date-field-type - uses Java.lang.String.contains(value) method for the string representation of a date value, eg. '2010-12-02' contains '-12-' is true
+   </xs:documentation>
+  </xs:annotation>
+ </xs:element>
+
+ <xs:element name="field-matches-regex" substitutionGroup="condition" type="content-based-state-rule-type">
+  <xs:annotation>
+   <xs:documentation>
+    Rule for when regular expression is run against named field value.
+    Behavior for various field types:
+    1) INTEGER - uses Java.lang.String.matches(regex) method for the string representation of an integer value, eg. 125 contains '2' is true
+    2) FLOAT - uses Java.lang.String.matches(regex) method for the string representation of a float value, eg. 125.075 contains '07' is true
+    3) file-attachment-field - uses Java.lang.String.matches(regex) method for the string representation of a file name value, eg. 'my-resume.pdf' contains '.pdf' is true
+    4) TEXT - uses Java.lang.String.matches(regex) method
+    5) date-field-type - uses Java.lang.String.matches(regex) method for the string representation of a date value, eg. '2010-12-02' contains '-12-' is true
+   </xs:documentation>
+  </xs:annotation>
+ </xs:element>
+
+
+ <xs:element name="field-mismatches-regex" substitutionGroup="condition" type="content-based-state-rule-type">
+  <xs:annotation>
+   <xs:documentation>
+    Rule for when regular expression is run against named field value 
+    Behavior for various field types:
+    1) INTEGER - uses Java.lang.String.matches(regex) method for the string representation of an integer value, eg. 125 contains '2' is true
+    2) FLOAT - uses Java.lang.String.matches(regex) method for the string representation of a float value, eg. 125.075 contains '07' is true
+    3) file-attachment-field - uses Java.lang.String.matches(regex) method for the string representation of a file name value, eg. 'my-resume.pdf' contains '.pdf' is true
+    4) TEXT - uses Java.lang.String.matches(regex) method
+    5) date-field-type - uses Java.lang.String.matches(regex) method for the string representation of a date value, eg. '2010-12-02' contains '-12-' is true
+   </xs:documentation>
+  </xs:annotation>
+ </xs:element>
+
+ 
+ <xs:complexType name="asset-layout-type">
+  <xs:annotation>
+   <xs:documentation>
+    Style properties for the "asset" element (input-text, text-area, etc.) 
+   </xs:documentation>
+  </xs:annotation>
+  <xs:complexContent>
+   <xs:annotation>
+    <xs:documentation>
+     <![CDATA[
+     Layout description for asset consists of:
+     a) layout for title (optional), from layout-components-type
+     b) layout for description (optional), from layout-components-type
+     c) layout code (optional), from layout-element, for field-layout-element code details, see more desctiption below
+     d) layout for content (optional)
+     ]]>
+    </xs:documentation>
+   </xs:annotation>
+   <xs:extension base="layout-components-type">
+    <xs:sequence minOccurs="1" maxOccurs="1">
+     <xs:element minOccurs="0" maxOccurs="1" name="for-content" type="layout-component-type">
+      <xs:annotation>
+       <xs:documentation>
+         Style properties for the content area of an asset element
+       </xs:documentation>
+      </xs:annotation>
+     </xs:element>
+    </xs:sequence>
+   </xs:extension>
+  </xs:complexContent>
+ </xs:complexType>
+
+ <xs:complexType name="field-layout-type">
+  <xs:annotation>
+   <xs:documentation>
+    Style properties for the "field" element (input-text, text-area, etc.) 
+   </xs:documentation>
+  </xs:annotation>
+  <xs:complexContent>
+   <xs:annotation>
+    <xs:documentation>
+     <![CDATA[
+     Layout description for field consists of:
+     a) layout for title (optional), from layout-element
+     b) layout for description (optional), from layout-element
+     c) layout code (optional), from layout-element, for field-layout-element code details, see more desctiption below
+     d) layout for label (optional)
+     e) layout for input (optional)
+     ]]>
+    </xs:documentation>
+   </xs:annotation>
+   <xs:extension base="layout-components-type">
+    <xs:sequence minOccurs="1" maxOccurs="1">
+     <xs:element minOccurs="0" maxOccurs="1" name="for-label" type="layout-component-type">
+      <xs:annotation>
+       <xs:documentation>
+        Style properties for the label of a "field" element (input-text, text-area, etc.) 
+       </xs:documentation>
+      </xs:annotation>
+     </xs:element> 
+     <xs:element name="for-input" minOccurs="0" maxOccurs="1" type="layout-component-type">
+      <xs:annotation>
+       <xs:documentation>
+        Style properties for the user input area of a "field" element (input-text, text-area, etc.) 
+       </xs:documentation>
+      </xs:annotation>
+     </xs:element> 
+    </xs:sequence>
+   </xs:extension>
+  </xs:complexContent>
+ </xs:complexType>
+ 
+ <xs:complexType name="layout-components-type">
+  <xs:annotation>
+   <xs:documentation>
+    Provides specification of layout information elements common to all visual elements (container, title &amp; description) 
+   </xs:documentation>
+  </xs:annotation>
+  <xs:sequence minOccurs="1" maxOccurs="1">
+   <xs:element minOccurs="0" maxOccurs="1" name="for-container" type="layout-component-type">
+    <xs:annotation>
+     <xs:documentation>
+      Style properties for the container of a "content" element (page, asset, group or field). 
+     </xs:documentation>
+    </xs:annotation>
+   </xs:element> 
+   <xs:element minOccurs="0" maxOccurs="1" name="for-title" type="layout-component-type">
+    <xs:annotation>
+     <xs:documentation>
+      Style properties for the title of a "content" element (page, asset, group or field). 
+     </xs:documentation>
+    </xs:annotation>
+   </xs:element>
+   
+   <xs:element name="for-description" minOccurs="0" maxOccurs="1" type="layout-component-type">
+    <xs:annotation>
+     <xs:documentation>
+      Style properties for the description of a "content" element (page, asset, group or field).
+     </xs:documentation>
+    </xs:annotation>
+   </xs:element> 
+
+   <xs:element name="specification" minOccurs="0" maxOccurs="1" type="longNonEmptyToken">
+    <xs:annotation>
+     <xs:documentation>
+      <![CDATA[
+       Provides specification of layout for a visual element, 
+       depending on engine type.
+       When TILES, it shall contain name of an existing tile,
+       When HTML (not supported yet), various tokens, such as [LABEL],[INPUT],[FIELD],
+       [TITLE],[DESCRIPTION],[field-name],$field[field-name] 
+       can be used as placeholders for corresponding components.
+       An example of code for field-layout-element where label and input elements have own <span> containers:
+       <span class="label-span">[LABEL]</span><span class="input-span">[INPUT]</span>.
+       An example of code where the group is laid out:
+       <fieldset>
+        <div><strong>Details of Owner for $field[business.name]</strong></div>
+        <div>Name: [person.first-name][person.last-name]</div>
+        <div>Address:</div>
+        <div>[person.street]/div>
+        <div>[person.suburb]/div>
+        <div>[person.postcode]/div>
+       </fieldset>
+       For more details, see relevant layout element.
+       
+       if this element is not defined, value of the element is inherited from field layout.
+      ]]>
+     </xs:documentation>
+    </xs:annotation>
+   </xs:element>
+  </xs:sequence>
+  <xs:attribute name="name" type="shortID" use="required">
+   <xs:annotation>
+    <xs:documentation>
+     Each element of this type must have a 'name' attribute with a unique value. 
+     
+     TODO: is this true? When layout name is blank, this layout substitutes the definition of a default layout.
+    </xs:documentation>
+   </xs:annotation>
+  </xs:attribute>
+  <xs:attribute name="engine" type="layout-engine-list" use="optional" default="TILES">
+   <xs:annotation>
+    <xs:documentation>
+     Layout can be composed using different engines.
+    </xs:documentation>
+   </xs:annotation>
+  </xs:attribute>
+ </xs:complexType>
+ 
+ 
+  <xs:simpleType name="javascript-code-fragment">
+  <xs:annotation>
+   <xs:documentation>
+    Javascript code fragment to be evaluated. Interpretation of value assigned to a compulsory 'smartformResult' variable.
+   </xs:documentation>
+  </xs:annotation>
+  <xs:restriction base="longNonEmptyToken">
+    <xs:annotation>
+     <xs:documentation>
+      <![CDATA[
+      Javascript code fragments must contain the declaration of the variable "smartformResult".
+
+      Access to the following variables is available:
+      a) $field[field_name] - smartform user input field with name "field_name"
+      b) $portal[param_name] - portal parameter with name "param_name"
+      c) $portlet[param_name] - portlet parameter with name "param_name"
+      d) $session[attr_name] - HTTP session parameter with name "attr_name"
+      e) $request[param_name] - HTTP request (GET/POST) parameter with name "param_name"
+      f) $custom[param_name] - custom parameter with name "param_name"
+
+     ]]></xs:documentation>
+    </xs:annotation>
+    <xs:pattern value=".*var smartformResult.*">
+    </xs:pattern>
+  </xs:restriction>
+
+ </xs:simpleType>
+ 
+
+ <xs:simpleType name="tinyToken">
+  <xs:restriction base="xs:token">
+   <xs:maxLength value="16" />
+  </xs:restriction>
+ </xs:simpleType>
+
+ <xs:simpleType name="shortToken">
+  <xs:restriction base="xs:token">
+   <xs:maxLength value="64" />
+  </xs:restriction>
+ </xs:simpleType>
+ 
+ <xs:simpleType name="mediumToken">
+  <xs:restriction base='xs:token'>
+   <xs:maxLength value="256" />
+  </xs:restriction>
+ </xs:simpleType>
+ 
+ <xs:simpleType name="nonEmptyToken">
+  <xs:restriction base="xs:token">
+   <xs:minLength value="1" />
+  </xs:restriction>
+ </xs:simpleType>
+
+ <xs:simpleType name="tinyNonEmptyToken">
+  <xs:restriction base="nonEmptyToken">
+   <xs:maxLength value="16" />
+  </xs:restriction>
+ </xs:simpleType>
+
+ <xs:simpleType name="shortNonEmptyToken">
+  <xs:restriction base="nonEmptyToken">
+   <xs:maxLength value="64" />
+  </xs:restriction>
+ </xs:simpleType>
+
+ <xs:simpleType name="mediumNonEmptyToken">
+  <xs:restriction base="nonEmptyToken">
+   <xs:maxLength value="256" />
+  </xs:restriction>
+ </xs:simpleType>
+
+ <xs:simpleType name="longNonEmptyToken">
+  <xs:restriction base="nonEmptyToken">
+   <xs:maxLength value="1024" />
+  </xs:restriction>
+ </xs:simpleType>
+ 
+ <xs:simpleType name="shortID">
+  <xs:restriction base="xs:ID">
+   <xs:maxLength value="64" />
+  </xs:restriction>
+ </xs:simpleType>
+ 
+ <xs:simpleType name="limitedURI">
+  <xs:restriction base="xs:anyURI">
+   <xs:maxLength value="256" />
+  </xs:restriction>
+ </xs:simpleType>
+ 
+  <!--xs:simpleType name="css-identifier-type">
+   <xs:annotation>
+    <xs:documentation>
+     Special string type for CSS identifiers
+    </xs:documentation>
+   </xs:annotation>
+   <xs:restriction base="shortNonEmptyToken">
+    <xs:annotation>
+     <xs:documentation>
+      <![CDATA[
+       From s4.1.3 of CSS 2.1 TR:
+       
+       CSS identifiers (including element names, classes, and IDs in selectors) can contain only the characters [a-zA-Z0-9] and ISO 10646 characters U+00A0 and higher, plus the hyphen (-) and the underscore (_); they cannot start with a digit, two hyphens, or a hyphen followed by a digit.
+       Identifiers can also contain escaped characters and any ISO 10646 character as a numeric code (see next item). For instance, the identifier "B&W?" may be written as "B\&W\?" or "B\26 W\3F".
+       ]]>
+     </xs:documentation>
+    </xs:annotation>
+     <xs:pattern value='(([\\a-zA-Z_&#x00A0;-&#xD7FF;]{1,2}|-[\\a-zA-Z_&#x00A0;-&#xD7FF;])[-\\a-zA-Z0-9_&#x00A0;-&#xD7FF;]*)' />
+   </xs:restriction>
+ </xs:simpleType-->
+ 
+ <xs:simpleType name="IDREFs">
+  <xs:restriction>
+   <xs:simpleType>
+    <xs:list>
+   <xs:simpleType>
+    <xs:restriction base="xs:IDREF"/>
+   </xs:simpleType>
+    </xs:list>
+   </xs:simpleType>
+  </xs:restriction>
+ </xs:simpleType>
+ 
+ <xs:complexType name="layout-component-type">
+   <xs:annotation>
+    <xs:documentation>
+     Generic complex type for layout component elements. Used by for-container, for-title, for-description, for-content, for-input and for-label elements 
+    </xs:documentation>
+   </xs:annotation>
+   <xs:attribute name="style" type="mediumNonEmptyToken" use="optional">
+    <xs:annotation>
+     <xs:documentation>
+     <![CDATA[
+      Used to apply inline styling for the layout element, e.g. <div style="margin-left:10px" ...
+     ]]>
+     </xs:documentation>
+    </xs:annotation>
+   </xs:attribute>
+   <xs:attribute name="class" type="mediumNonEmptyToken" use="optional">
+    <xs:annotation>
+     <xs:documentation>
+     <![CDATA[
+      Can be used to apply an additional css class for the layout element, e.g. <span class="names" ...
+     ]]>
+     </xs:documentation>
+    </xs:annotation>
+   </xs:attribute>
+ </xs:complexType>
+
+ <xs:simpleType name="encryption-policy-list">
+  <xs:annotation>
+   <xs:documentation>
+    Specifies encryption policy choice for record storage
+   </xs:documentation>
+  </xs:annotation>
+  <xs:restriction base="tinyNonEmptyToken">
+   <xs:enumeration value="NONE">
+    <xs:annotation>
+     <xs:documentation>
+      	Records are not to be encrypted.
+      	Use this for non-critical and short-term lifespan records.
+     </xs:documentation>
+    </xs:annotation>
+   </xs:enumeration>
+   <!--xs:enumeration value="CLOUD">
+    <xs:annotation>
+     <xs:documentation>
+      	A unqiue key is automatically generated and issued for every new record. 
+      	Issuance and storage of keys is managed within the cloud infrastructure.
+      	Use this encryption type when medium-level of data security is required.
+     </xs:documentation>
+    </xs:annotation>
+   </xs:enumeration>
+   <xs:enumeration value="LICENCE">
+    <xs:annotation>
+     <xs:documentation>
+      	Records are to be encrypted using encryption keys incorporated within the licence.
+      	A unique key is generated and issued when product licence is generated.
+      	Key is encrypted and stored on the client side. Copy of key is also kept in MyOffice24x7
+      	licence archive. This key is used at runtime only and is not stored/cached anywhere in a
+      	datacentre.
+      	Use this encryption type when high-level of data security is required.
+      	
+      	IMPORTANT NOTE: Due to NO-PERSISTENT-KEY-STORAGE requirement, use of form with 
+      	LICENCE encryption type is limited to direct interactions, e.g. attempt to utilise asynchronous 
+      	workflows will result in failed access to data.
+      	
+     </xs:documentation>
+    </xs:annotation>
+   </xs:enumeration>
+   <xs:enumeration value="APPLICATION">
+    <xs:annotation>
+     <xs:documentation>
+      	Records are to be encrypted using client-side issued encryption keys.
+      	A unique key shall be generated and provided by the client application(s).
+     	Maintenance of this key is a sole responsibility of principal.
+      	If the key is lost or changed by the principal, records can not be recovered.
+      	Use this encryption type when mission-critical level of data security is required.
+      	
+      	NOTE: Some client applications may not provide support of client-side issued keys.
+      	
+      	IMPORTANT NOTE: Due to NO-PERSISTENT-KEY-STORAGE requirement, use of form with 
+      	APPLICATION encryption type is limited to direct interactions, e.g. attempt to utilise asynchronous 
+      	workflows will result in failed access to data.
+      	
+     </xs:documentation>
+    </xs:annotation>
+   </xs:enumeration>
+   <xs:enumeration value="USER">
+    <xs:annotation>
+     <xs:documentation>
+     	This encryption type is currently available in Enterprise Version only.
+     	
+      	Records are to be encrypted using key issued by form user.
+      	Maintenance of the key is a sole responsibility of a form user.
+      	If the key is lost or changed by the form user, record can not be recovered.
+      	Use this encryption type when access to record shall not be allowed until
+      	a permission is given by the customer.
+      	
+      	IMPORTANT NOTE: Due to NO-PERSISTENT-KEY-STORAGE requirement, use of form with 
+      	USER encryption type is limited to direct interactions, e.g. attempt to utilise asynchronous 
+      	workflows will result in failed access to data.
+      	
+     </xs:documentation>
+    </xs:annotation>
+   </xs:enumeration-->
+  </xs:restriction>
+ </xs:simpleType> 
+ 
+ <xs:simpleType name="reference-code-policy-list">
+  <xs:annotation>
+   <xs:documentation>
+    Specifies the way a reference code for a record is to be created
+   </xs:documentation>
+  </xs:annotation>
+  <xs:restriction base="tinyNonEmptyToken">
+   <xs:enumeration value="NONE">
+    <xs:annotation>
+     <xs:documentation>
+      Reference code is not be generated, referencing form by this code will not
+      be allowed.
+     </xs:documentation>
+    </xs:annotation>
+   </xs:enumeration>
+   <xs:enumeration value="FIELD">
+    <xs:annotation>
+     <xs:documentation>
+      Reference code is will be entered as part of form, the field name shall be
+      'session.reference.code'
+     </xs:documentation>
+    </xs:annotation>
+   </xs:enumeration>
+   <xs:enumeration value="AUTO">
+    <xs:annotation>
+     <xs:documentation>
+      A random UUID will be generated
+     </xs:documentation>
+    </xs:annotation>
+   </xs:enumeration>
+  </xs:restriction>
+ </xs:simpleType>
+ 
+ <xs:simpleType name="layout-engine-list">
+  <xs:annotation>
+   <xs:documentation>
+    The following layout engines are allowed for 
+    use in smart forms:
+    tiles,
+    html
+   </xs:documentation>
+  </xs:annotation>
+     <xs:restriction base="tinyNonEmptyToken">
+       <xs:enumeration value="TILES"/>
+       <!-- HTML layout is not supported in this version -->
+       <!--xs:enumeration value="HTML"/-->
+       </xs:restriction>
+ </xs:simpleType>
+ 
+ <!-- Elemenet declared solely to allow use of substitutionGroups -->
+ <xs:element name="content" type="stateful-visual-type" abstract="true">
+  <xs:annotation>
+   <xs:documentation>
+    [Abstract] Head of the substitutionGroup for types derived from "stateful-visual-type"
+   </xs:documentation>
+  </xs:annotation>
+ </xs:element>
+
+ <xs:element name="group" type="group-element-type" substitutionGroup="content">
+  <xs:annotation>
+   <xs:documentation>
+    Defines a generic container for zero or more other content items. Contains the following sub-elements:
+       a) [optional] title (inherited from visual-element-type type)
+       b) [optional] description (inherited from visual-element-type type)
+       c) [optional] state (inherited from stateful-visual-type type)
+       d) a sequence of 0 or more content elements (assets, groups, fields)
+       
+    And the following attributes:
+      a) [optional] name
+      b) [optional] group-layout-name
+
+   </xs:documentation>
+  </xs:annotation>
+ </xs:element>
+ 
+ <xs:element name="asset" type="asset-type" substitutionGroup="content">
+  <xs:annotation>
+   <xs:documentation>
+    Defines a container for display of a non-submittable/informational content. Contains the following sub-elements:
+       a) [optional] title (inherited from visual-element-type type)
+       b) [optional] description (inherited from visual-element-type type)
+       c) [optional] state (inherited from stateful-visual-type type); and 
+       d) Either:
+         i) a pointer to external content fetched from a specified URI
+         ii) explicitly defined content 
+
+    And the following attribute:
+      a) [optional] asset-layout-name
+
+   </xs:documentation>
+  </xs:annotation>
+ </xs:element>
+ 
+ <xs:element name="input-text-field" type="input-text-field-type" substitutionGroup="content">
+  <xs:annotation>
+   <xs:documentation>
+    Defines a field that emulates an input text HTML element. Contains the following sub-elements:
+      a) [optional] title (inherited from visual-element-type type)
+      b) [optional] description (inherited from visual-element-type type)
+      c) [optional] state (inherited from stateful-visual-type type)
+      d) label (inherited from field-type type)
+      e) [optional] default-value (inherited from field-type type)
+      f) [optional] runtime-value (inherited from field-type type)
+      g) [optional] validation-rules (inherited from field-type type)
+      h) size
+      i) [optional] max-length
+
+    And the following attributes:
+      a) name (inherited from field-type type)
+      b) [optional] field-layout-name (inherited from field-type type)
+      c) [optional] read-only (inherited from field-type type)
+      d) [optional] value-type
+      e) [optional] format
+
+   </xs:documentation>
+  </xs:annotation>
+ </xs:element>
+ 
+ <xs:element name="text-area-field" type="text-area-field-type" substitutionGroup="content">
+  <xs:annotation>
+   <xs:documentation>
+    Defines a field that emulates an text area HTML element. Contains the following sub-elements:
+      a) [optional] title (inherited from visual-element-type type)
+      b) [optional] description (inherited from visual-element-type type)
+      c) [optional] state (inherited from stateful-visual-type type)
+      d) label (inherited from field-type type)
+      e) [optional] default-value (inherited from field-type type)
+      f) [optional] runtime-value (inherited from field-type type)
+      g) [optional] validation-rules (inherited from field-type type)
+      h) cols
+      i) rows
+
+    And the following attributes:
+      a) name (inherited from field-type type)
+      b) [optional] field-layout-name (inherited from field-type type)
+      c) [optional] read-only (inherited from field-type type)
+   </xs:documentation>
+  </xs:annotation>
+ </xs:element>
+ 
+ <xs:element name="file-attachment-field" type="file-attachment-field-type" substitutionGroup="content">
+  <xs:annotation>
+   <xs:documentation>
+    Defines a field that allows uploading of file attachments. Contains the following sub-elements:
+      a) [optional] title (inherited from visual-element-type type)
+      b) [optional] description (inherited from visual-element-type type)
+      c) [optional] state (inherited from stateful-visual-type type)
+      d) label (inherited from field-type type)
+      e) [optional] default-value (inherited from field-type type)
+      f) [optional] runtime-value (inherited from field-type type)
+      g) [optional] validation-rules (inherited from field-type type)
+      h) [optional] upload-instructions 
+      i) [optional] restrict-to-file-types
+      j) [optional] maximum-file-size
+
+    And the following attributes:
+      a) name (inherited from field-type type)
+      b) [optional] field-layout-name (inherited from field-type type)
+      c) [optional] read-only (inherited from field-type type)
+
+   </xs:documentation>
+  </xs:annotation>
+ </xs:element>
+ 
+ <xs:element name="date-field" type="date-field-type" substitutionGroup="content">
+  <xs:annotation>
+   <xs:documentation>
+    Defines a field that allows specification of dates. Contains the following sub-elements:
+      a) [optional] title (inherited from visual-element-type type)
+      b) [optional] description (inherited from visual-element-type type)
+      c) [optional] state (inherited from stateful-visual-type type)
+      d) label (inherited from field-type type)
+      e) [optional] default-value (inherited from field-type type)
+      f) [optional] runtime-value (inherited from field-type type)
+      g) [optional] validation-rules (inherited from field-type type)
+      h) [optional] format 
+      i) [optional] select-from
+      j) [optional] select-to
+
+    And the following attributes:
+      a) name (inherited from field-type type)
+      b) [optional] field-layout-name (inherited from field-type type)
+      c) [optional] read-only (inherited from field-type type)
+      d) [optional] style 
+   </xs:documentation>
+  </xs:annotation>
+ </xs:element>
+
+ <xs:element name="choice-field" type="choice-field-type"  substitutionGroup="content">
+  <xs:annotation>
+   <xs:documentation>
+    Defines a field that emulates one of the following HTML element types: Radio Group, Checkbox Group or Select Menu. Contain the following sub-elements:
+      a) [optional] title (inherited from visual-element-type type)
+      b) [optional] description (inherited from visual-element-type type)
+      c) [optional] state (inherited from stateful-visual-type type)
+      d) label (inherited from field-type type)
+      e) [optional] default-value (inherited from field-type type)
+      f) [optional] runtime-value (inherited from field-type type)
+      g) [optional] validation-rules (inherited from field-type type)
+      h) options 
+
+    And the following attributes:
+      a) name (inherited from field-type type)
+      b) [optional] field-layout-name (inherited from field-type type)
+      c) [optional] read-only (inherited from field-type type)
+
+   </xs:documentation>
+  </xs:annotation>
+ </xs:element>
+
+
+ <xs:element name="hidden-field" type="hidden-field-type" substitutionGroup="content" />
+
+
+<!--
+ 
+ <xs:element name="visual-group" type="group-element-type" abstract="true" />
+ <xs:element name="group" type="group-element-type" substitutionGroup="visual-group" />
+ 
+ <xs:element name="fieldset-group" substitutionGroup="visual-group" type="group-element-type">
+  <xs:annotation>
+   <xs:documentation>
+    Container where children are displayed as a fieldset
+   </xs:documentation>
+  </xs:annotation>
+ </xs:element>
+
+ <xs:element name="dyn-table-group" substitutionGroup="visual-group" type="dyn-table-group-element-type"/>
+
+ --> 
+
+</xs:schema>

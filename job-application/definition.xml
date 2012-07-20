@@ -1,0 +1,1296 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<smartform xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="smartform-schema.xsd">
+    <description>Job Application - Web Manager</description>
+    <start-page>
+        <title>Job Application - Web Manager</title>
+        <asset asset-layout-name="frontpage">
+            <content><![CDATA[
+                           <p><strong>Location:</strong> Melbourne, Australia</p> 
+                           <p><strong>Job Type:</strong> Permanent</strong></p>
+                        ]]></content>
+        </asset>
+        <asset asset-layout-name="frontpage">
+            <content><![CDATA[
+                        <p>
+                           We are looking for a Web Manager to take overall responsibility of 
+                            its corporate website and several ancillary websites. 
+                        </p>
+                        <p>
+                            <strong>Typcial assignments include:</strong>
+                        </p>
+                        <ul>
+                            <li>Overseeing creation and maintenance of site content</li>
+                            <li>Oversight and management of support staff</li>
+                            <li>Making recommendations on policy and adoption of technologies</li>
+                        </ul>
+                        <p style="margin-top: 10px">
+                            <strong>Required skills, knowledge and experience:</strong>
+                        </p>
+                        <ul>
+                            <li>At least 3 years of hands-on experience managing websites, preferably
+                            in the role of a project manager.</li>
+                            <li>A degree in a related field</li>
+                            <li>Demonstrated proficiency with a variety of related web technologies:
+                                <ul>
+                                    <li>HTML/CSS</li>
+                                    <li>Server-side scripting languages (Java, PHP, Rails, Python)</li>
+                                    <li>Content Management Systems</li>
+                                </ul>
+                            </li>
+                        </ul>
+                        <p style="margin-top: 10px">
+                            <strong>If you enjoy autonomy, diversity in your roles and utilising your initiative apply for this role now.</strong>  
+                        </p>
+                        ]]></content>
+        </asset>
+    </start-page>
+    <completed-page>
+        <title>Application Received</title>
+        <asset asset-layout-name="frontpage">
+            <content>We have received your application and will get back to you once we have made a
+                decision.</content>
+        </asset>
+    </completed-page>
+    <page name="Introduction">
+        <title>Terms and Conditions</title>
+        <group>
+            <asset>
+                <content><![CDATA[
+                        <p>
+                            By submitting this form, I certify that all information provided within is correct to the best of my knowledge.    
+                            I understand that false statements may result in termination of my employment, if hired.
+                        </p>
+                        <p>
+                            I understand that my information obtained via this application process will be stored indefinetely in a private
+                            database for future use in recruiment efforts by the company.
+                        </p>
+                        ]]></content>
+            </asset>
+            <choice-field style="RADIO" name="terms.accept" field-layout-name="wide-label">
+                <label>I have read, understood and agreed to the terms above:</label>
+                <validation-rules>
+                    <equals
+                        error-message="You must accept the terms in order to apply for this role."
+                        >Yes</equals>
+                </validation-rules>
+                <constant-options>
+                    <option value="Yes"/>
+                    <option value="No"/>
+                </constant-options>
+            </choice-field>
+        </group>
+    </page>
+    <page name="Personal">
+        <title>Section 1: Personal</title>
+        <group>
+            <group>
+                <choice-field style="SELECT" name="personal.title">
+                    <label>Title:</label>
+                    <validation-rules>
+                        <must-have-value error-message="Please select a title"/>
+                    </validation-rules>
+                    <constant-options>
+                        <option value="Mr"/>
+                        <option value="Mrs"/>
+                        <option value="Miss"/>
+                        <option value="Ms"/>
+                        <option value="Dr"/>
+                    </constant-options>
+                </choice-field>
+            </group>
+            <group>
+                <input-text-field name="personal.name" size="20">
+                    <label>First Name:</label>
+                    <validation-rules>
+                        <must-have-value error-message="Please provide your first name"/>
+                    </validation-rules>
+                </input-text-field>
+                <input-text-field name="personal.surname" size="20">
+                    <label>Surname:</label>
+                    <validation-rules>
+                        <must-have-value error-message="Please provide your surname"/>
+                    </validation-rules>
+                </input-text-field>
+            </group>
+            <group>
+                <date-field name="personal.dob">
+                    <label>Date of Birth:</label>
+                    <validation-rules>
+                        <must-have-value error-message="Please provide your date of birth"/>
+                    </validation-rules>
+                    <format>
+                        <day-element/>
+                        <month-element/>
+                        <year-element/>
+                        <select-from offset="-P80Y"/>
+                        <select-to offset="-P18Y"/>
+                    </format>
+                </date-field>
+            </group>
+        </group>
+        <group>
+            <title>Residential Address</title>
+            <input-text-field name="residental.address.line-1" size="30">
+                <label>Address Line 1:</label>
+                <validation-rules>
+                    <must-have-value error-message="Please provide an address"/>
+                </validation-rules>
+            </input-text-field>
+            <input-text-field name="residental.address.line-2" size="30">
+                <state-rules>
+                    <default-state state-name="OPTIONAL"/>
+                </state-rules>
+                <label>Address Line 2:</label>
+            </input-text-field>
+            <input-text-field name="residential.address.suburb" size="20">
+                <label>Suburb/Town:</label>
+                <validation-rules>
+                    <must-have-value error-message="Please provide a subrb"/>
+                </validation-rules>
+            </input-text-field>
+            <input-text-field name="residential.address.postcode" size="4">
+                <label>Postcode:</label>
+                <validation-rules>
+                    <regex-match error-message="Please provide a valid postcode">[0-9]{4}</regex-match>
+                </validation-rules>
+            </input-text-field>
+            <choice-field style="SELECT" name="residential.address.state">
+                <state-rules>
+                    <conditional-state state-name="HIDDEN">
+                        <condition-set>
+                            <field-not-equal field-name="residential.address.country"
+                                >Australia</field-not-equal>
+                        </condition-set>
+                    </conditional-state>
+                    <default-state state-name="REQUIRED"/>
+                </state-rules>
+                <label>State:</label>
+                <validation-rules>
+                    <must-have-value error-message="Please choose a state"/>
+                </validation-rules>
+                <constant-options>
+                    <option value="ACT"/>
+                    <option value="NSW"/>
+                    <option value="NT"/>
+                    <option value="QLD"/>
+                    <option value="SA"/>
+                    <option value="TAS"/>
+                    <option value="VIC"/>
+                    <option value="WA"/>
+                </constant-options>
+            </choice-field>
+            <choice-field style="SELECT" name="residential.address.country">
+                <label>Country:</label>
+                <default-value>
+                    <constant>Australia</constant>
+                </default-value>
+                <validation-rules>
+                    <must-have-value error-message="Please choose a country"/>
+                </validation-rules>
+                <constant-options>
+                    <option value="Afganistan"/>
+                    <option value="Albania"/>
+                    <option value="Algeria"/>
+                    <option value="American Samoa"/>
+                    <option value="Andorra"/>
+                    <option value="Angola"/>
+                    <option value="Anguilla"/>
+                    <option value="Antigua &amp; Barbuda"/>
+                    <option value="Argentina"/>
+                    <option value="Armenia"/>
+                    <option value="Aruba"/>
+                    <option value="Australia"/>
+                    <option value="Austria"/>
+                    <option value="Azerbaijan"/>
+                    <option value="Bahamas"/>
+                    <option value="Bahrain"/>
+                    <option value="Bangladesh"/>
+                    <option value="Barbados"/>
+                    <option value="Belarus"/>
+                    <option value="Belgium"/>
+                    <option value="Belize"/>
+                    <option value="Benin"/>
+                    <option value="Bermuda"/>
+                    <option value="Bhutan"/>
+                    <option value="Bolivia"/>
+                    <option value="Bonaire"/>
+                    <option value="Bosnia &amp; Herzegovina"/>
+                    <option value="Botswana"/>
+                    <option value="Brazil"/>
+                    <option value="British Indian Ocean Ter"/>
+                    <option value="Brunei"/>
+                    <option value="Bulgaria"/>
+                    <option value="Burkina Faso"/>
+                    <option value="Burundi"/>
+                    <option value="Cambodia"/>
+                    <option value="Cameroon"/>
+                    <option value="Canada"/>
+                    <option value="Canary Islands"/>
+                    <option value="Cape Verde"/>
+                    <option value="Cayman Islands"/>
+                    <option value="Central African Republic"/>
+                    <option value="Chad"/>
+                    <option value="Channel Islands"/>
+                    <option value="Chile"/>
+                    <option value="China"/>
+                    <option value="Christmas Island"/>
+                    <option value="Cocos Island"/>
+                    <option value="Colombia"/>
+                    <option value="Comoros"/>
+                    <option value="Congo"/>
+                    <option value="Cook Islands"/>
+                    <option value="Costa Rica"/>
+                    <option value="Cote DIvoire"/>
+                    <option value="Croatia"/>
+                    <option value="Cuba"/>
+                    <option value="Curaco"/>
+                    <option value="Cyprus"/>
+                    <option value="Czech Republic"/>
+                    <option value="Denmark"/>
+                    <option value="Djibouti"/>
+                    <option value="Dominica"/>
+                    <option value="Dominican Republic"/>
+                    <option value="East Timor"/>
+                    <option value="Ecuador"/>
+                    <option value="Egypt"/>
+                    <option value="El Salvador"/>
+                    <option value="Equatorial Guinea"/>
+                    <option value="Eritrea"/>
+                    <option value="Estonia"/>
+                    <option value="Ethiopia"/>
+                    <option value="Falkland Islands"/>
+                    <option value="Faroe Islands"/>
+                    <option value="Fiji"/>
+                    <option value="Finland"/>
+                    <option value="France"/>
+                    <option value="French Guiana"/>
+                    <option value="French Polynesia"/>
+                    <option value="French Southern Ter"/>
+                    <option value="Gabon"/>
+                    <option value="Gambia"/>
+                    <option value="Georgia"/>
+                    <option value="Germany"/>
+                    <option value="Ghana"/>
+                    <option value="Gibraltar"/>
+                    <option value="Great Britain"/>
+                    <option value="Greece"/>
+                    <option value="Greenland"/>
+                    <option value="Grenada"/>
+                    <option value="Guadeloupe"/>
+                    <option value="Guam"/>
+                    <option value="Guatemala"/>
+                    <option value="Guinea"/>
+                    <option value="Guyana"/>
+                    <option value="Haiti"/>
+                    <option value="Hawaii"/>
+                    <option value="Honduras"/>
+                    <option value="Hong Kong"/>
+                    <option value="Hungary"/>
+                    <option value="Iceland"/>
+                    <option value="India"/>
+                    <option value="Indonesia"/>
+                    <option value="Iran"/>
+                    <option value="Iraq"/>
+                    <option value="Ireland"/>
+                    <option value="Isle of Man"/>
+                    <option value="Israel"/>
+                    <option value="Italy"/>
+                    <option value="Jamaica"/>
+                    <option value="Japan"/>
+                    <option value="Jordan"/>
+                    <option value="Kazakhstan"/>
+                    <option value="Kenya"/>
+                    <option value="Kiribati"/>
+                    <option value="Korea North"/>
+                    <option value="Korea Sout"/>
+                    <option value="Kuwait"/>
+                    <option value="Kyrgyzstan"/>
+                    <option value="Laos"/>
+                    <option value="Latvia"/>
+                    <option value="Lebanon"/>
+                    <option value="Lesotho"/>
+                    <option value="Liberia"/>
+                    <option value="Libya"/>
+                    <option value="Liechtenstein"/>
+                    <option value="Lithuania"/>
+                    <option value="Luxembourg"/>
+                    <option value="Macau"/>
+                    <option value="Macedonia"/>
+                    <option value="Madagascar"/>
+                    <option value="Malaysia"/>
+                    <option value="Malawi"/>
+                    <option value="Maldives"/>
+                    <option value="Mali"/>
+                    <option value="Malta"/>
+                    <option value="Marshall Islands"/>
+                    <option value="Martinique"/>
+                    <option value="Mauritania"/>
+                    <option value="Mauritius"/>
+                    <option value="Mayotte"/>
+                    <option value="Mexico"/>
+                    <option value="Midway Islands"/>
+                    <option value="Moldova"/>
+                    <option value="Monaco"/>
+                    <option value="Mongolia"/>
+                    <option value="Montserrat"/>
+                    <option value="Morocco"/>
+                    <option value="Mozambique"/>
+                    <option value="Myanmar"/>
+                    <option value="Nambia"/>
+                    <option value="Nauru"/>
+                    <option value="Nepal"/>
+                    <option value="Netherland Antilles"/>
+                    <option value="Netherlands"/>
+                    <option value="Nevis"/>
+                    <option value="New Caledonia"/>
+                    <option value="New Zealand"/>
+                    <option value="Nicaragua"/>
+                    <option value="Niger"/>
+                    <option value="Nigeria"/>
+                    <option value="Niue"/>
+                    <option value="Norfolk Island"/>
+                    <option value="Norway"/>
+                    <option value="Oman"/>
+                    <option value="Pakistan"/>
+                    <option value="Palau Island"/>
+                    <option value="Palestine"/>
+                    <option value="Panama"/>
+                    <option value="Papua New Guinea"/>
+                    <option value="Paraguay"/>
+                    <option value="Peru"/>
+                    <option value="Phillipines"/>
+                    <option value="Pitcairn Island"/>
+                    <option value="Poland"/>
+                    <option value="Portugal"/>
+                    <option value="Puerto Rico"/>
+                    <option value="Qatar"/>
+                    <option value="Republic of Montenegro"/>
+                    <option value="Republic of Serbia"/>
+                    <option value="Reunion"/>
+                    <option value="Romania"/>
+                    <option value="Russia"/>
+                    <option value="Rwanda"/>
+                    <option value="St Barthelemy"/>
+                    <option value="St Eustatius"/>
+                    <option value="St Helena"/>
+                    <option value="St Kitts-Nevis"/>
+                    <option value="St Lucia"/>
+                    <option value="St Maarten"/>
+                    <option value="St Pierre &amp; Miquelon"/>
+                    <option value="St Vincent &amp; Grenadines"/>
+                    <option value="Saipan"/>
+                    <option value="Samoa"/>
+                    <option value="Samoa American"/>
+                    <option value="San Marino"/>
+                    <option value="Sao Tome &amp; Principe"/>
+                    <option value="Saudi Arabia"/>
+                    <option value="Senegal"/>
+                    <option value="Seychelles"/>
+                    <option value="Sierra Leone"/>
+                    <option value="Singapore"/>
+                    <option value="Slovakia"/>
+                    <option value="Slovenia"/>
+                    <option value="Solomon Islands"/>
+                    <option value="Somalia"/>
+                    <option value="South Africa"/>
+                    <option value="Spain"/>
+                    <option value="Sri Lanka"/>
+                    <option value="Sudan"/>
+                    <option value="Suriname"/>
+                    <option value="Swaziland"/>
+                    <option value="Sweden"/>
+                    <option value="Switzerland"/>
+                    <option value="Syria"/>
+                    <option value="Tahiti"/>
+                    <option value="Taiwan"/>
+                    <option value="Tajikistan"/>
+                    <option value="Tanzania"/>
+                    <option value="Thailand"/>
+                    <option value="Togo"/>
+                    <option value="Tokelau"/>
+                    <option value="Tonga"/>
+                    <option value="Trinidad &amp; Tobago"/>
+                    <option value="Tunisia"/>
+                    <option value="Turkey"/>
+                    <option value="Turkmenistan"/>
+                    <option value="Turks &amp; Caicos Is"/>
+                    <option value="Tuvalu"/>
+                    <option value="Uganda"/>
+                    <option value="Ukraine"/>
+                    <option value="United Arab Erimates"/>
+                    <option value="United Kingdom"/>
+                    <option value="United States of America"/>
+                    <option value="Uraguay"/>
+                    <option value="Uzbekistan"/>
+                    <option value="Vanuatu"/>
+                    <option value="Vatican City State"/>
+                    <option value="Venezuela"/>
+                    <option value="Vietnam"/>
+                    <option value="Virgin Islands (Brit)"/>
+                    <option value="Virgin Islands (USA)"/>
+                    <option value="Wake Island"/>
+                    <option value="Wallis &amp; Futana Is"/>
+                    <option value="Yemen"/>
+                    <option value="Zaire"/>
+                    <option value="Zambia"/>
+                    <option value="Zimbabwe"/>
+                </constant-options>
+            </choice-field>
+        </group>
+        <group>
+            <title>Contact Details</title>
+            <asset>
+                <state-rules>
+                    <conditional-state state-name="REQUIRED">
+                        <condition-set>
+                            <field-not-equal field-name="residential.address.country"
+                                >Australia</field-not-equal>
+                        </condition-set>
+                    </conditional-state>
+                    <default-state state-name="HIDDEN"/>
+                </state-rules>
+                <content>Please include the country code.</content>
+            </asset>
+            <input-text-field name="personal.email" size="20">
+                <label>Email Address:</label>
+                <validation-rules>
+                    <contains error-message="Please provide an email address">@</contains>
+                </validation-rules>
+            </input-text-field>
+            <input-text-field name="personal.phone.bh" size="12">
+                <label>BH Phone:</label>
+                <validation-rules>
+                    <regex-match error-message="Please provide a phone number">[0-9]+</regex-match>
+                </validation-rules>
+            </input-text-field>
+            <input-text-field name="personal.phone.work" size="12">
+                <label>Work Phone:</label>
+                <validation-rules>
+                    <regex-match error-message="Please provide a phone number">[0-9]+</regex-match>
+                </validation-rules>
+            </input-text-field>
+            <input-text-field name="personal.phone.ah" size="12">
+                <label>AH Phone:</label>
+                <validation-rules>
+                    <regex-match error-message="Please provide a phone number">[0-9]+</regex-match>
+                </validation-rules>
+            </input-text-field>
+        </group>
+    </page>
+    <page name="Availability">
+        <title>Section 2: Availability</title>
+        <group>
+            <group>
+                <choice-field style="RADIO" name="current.employed">
+                    <label>Are you currently employed?</label>
+                    <validation-rules>
+                        <must-have-value
+                            error-message="Please specify if you are currently employed"/>
+                    </validation-rules>
+                    <constant-options>
+                        <option value="Yes"/>
+                        <option value="No"/>
+                    </constant-options>
+                </choice-field>
+            </group>
+            <group>
+                <state-rules>
+                    <conditional-state state-name="REQUIRED">
+                        <condition-set>
+                            <field-equal field-name="current.employed">Yes</field-equal>
+                        </condition-set>
+                    </conditional-state>
+                    <default-state state-name="HIDDEN"/>
+                </state-rules>
+                <input-text-field name="current.role.name" size="30">
+                    <label>Current role:</label>
+                    <validation-rules>
+                        <must-have-value error-message="Please provide your current role name"/>
+                    </validation-rules>
+                </input-text-field>
+                <input-text-field name="current.role.notice-period" size="4">
+                    <label>Current notice period (in weeks):</label>
+                    <validation-rules>
+                        <regex-match error-message="Please provide your current notice period"
+                            >\d+</regex-match>
+                    </validation-rules>
+                </input-text-field>
+            </group>
+            <group>
+                <date-field name="current.role.availability">
+                    <label>Date available to commence work:</label>
+                    <validation-rules>
+                        <must-have-value
+                            error-message="Please specify when you are available to start work"/>
+                    </validation-rules>
+                    <format>
+                        <day-element/>
+                        <month-element/>
+                        <year-element/>
+                        <select-to offset="P1Y"/>
+                    </format>
+                </date-field>
+            </group>
+        </group>
+    </page>
+    <page name="Right to Work">
+        <title>Section 3: Proof of Right to Work in Australia</title>
+        <description>We are required to check that all prospective workers have a valid visa or
+            Australian citizenship prior to commencing work within Australia</description>
+        <group>
+            <group>
+                <choice-field style="RADIO" name="right-to-work.is-citizen"
+                    field-layout-name="wide-label">
+                    <label>Are you an Australian or New Zealand Citizen or Australian permanent
+                        resident?</label>
+                    <validation-rules>
+                        <must-have-value error-message="Please specify your residency status"/>
+                    </validation-rules>
+                    <constant-options>
+                        <option value="Yes"/>
+                        <option value="No"/>
+                    </constant-options>
+                </choice-field>
+            </group>
+            <group>
+                <state-rules>
+                    <conditional-state state-name="REQUIRED">
+                        <condition-set>
+                            <field-equal field-name="right-to-work.is-citizen">No</field-equal>
+                        </condition-set>
+                    </conditional-state>
+                    <default-state state-name="HIDDEN"/>
+                </state-rules>
+                <input-text-field name="right-to-work.passport.number" size="20">
+                    <label>Passport Number:</label>
+                    <validation-rules>
+                        <must-have-value error-message="Please provide your passport number"/>
+                    </validation-rules>
+                </input-text-field>
+                <choice-field style="SELECT" name="right-to-work.passport.country">
+                    <label>Country of Issue:</label>
+                    <validation-rules>
+                        <must-have-value
+                            error-message="Please specify your passport's country of issue"/>
+                    </validation-rules>
+                    <constant-options>
+                        <option value="Afganistan"/>
+                        <option value="Albania"/>
+                        <option value="Algeria"/>
+                        <option value="American Samoa"/>
+                        <option value="Andorra"/>
+                        <option value="Angola"/>
+                        <option value="Anguilla"/>
+                        <option value="Antigua &amp; Barbuda"/>
+                        <option value="Argentina"/>
+                        <option value="Armenia"/>
+                        <option value="Aruba"/>
+                        <option value="Australia"/>
+                        <option value="Austria"/>
+                        <option value="Azerbaijan"/>
+                        <option value="Bahamas"/>
+                        <option value="Bahrain"/>
+                        <option value="Bangladesh"/>
+                        <option value="Barbados"/>
+                        <option value="Belarus"/>
+                        <option value="Belgium"/>
+                        <option value="Belize"/>
+                        <option value="Benin"/>
+                        <option value="Bermuda"/>
+                        <option value="Bhutan"/>
+                        <option value="Bolivia"/>
+                        <option value="Bonaire"/>
+                        <option value="Bosnia &amp; Herzegovina"/>
+                        <option value="Botswana"/>
+                        <option value="Brazil"/>
+                        <option value="British Indian Ocean Ter"/>
+                        <option value="Brunei"/>
+                        <option value="Bulgaria"/>
+                        <option value="Burkina Faso"/>
+                        <option value="Burundi"/>
+                        <option value="Cambodia"/>
+                        <option value="Cameroon"/>
+                        <option value="Canada"/>
+                        <option value="Canary Islands"/>
+                        <option value="Cape Verde"/>
+                        <option value="Cayman Islands"/>
+                        <option value="Central African Republic"/>
+                        <option value="Chad"/>
+                        <option value="Channel Islands"/>
+                        <option value="Chile"/>
+                        <option value="China"/>
+                        <option value="Christmas Island"/>
+                        <option value="Cocos Island"/>
+                        <option value="Colombia"/>
+                        <option value="Comoros"/>
+                        <option value="Congo"/>
+                        <option value="Cook Islands"/>
+                        <option value="Costa Rica"/>
+                        <option value="Cote DIvoire"/>
+                        <option value="Croatia"/>
+                        <option value="Cuba"/>
+                        <option value="Curaco"/>
+                        <option value="Cyprus"/>
+                        <option value="Czech Republic"/>
+                        <option value="Denmark"/>
+                        <option value="Djibouti"/>
+                        <option value="Dominica"/>
+                        <option value="Dominican Republic"/>
+                        <option value="East Timor"/>
+                        <option value="Ecuador"/>
+                        <option value="Egypt"/>
+                        <option value="El Salvador"/>
+                        <option value="Equatorial Guinea"/>
+                        <option value="Eritrea"/>
+                        <option value="Estonia"/>
+                        <option value="Ethiopia"/>
+                        <option value="Falkland Islands"/>
+                        <option value="Faroe Islands"/>
+                        <option value="Fiji"/>
+                        <option value="Finland"/>
+                        <option value="France"/>
+                        <option value="French Guiana"/>
+                        <option value="French Polynesia"/>
+                        <option value="French Southern Ter"/>
+                        <option value="Gabon"/>
+                        <option value="Gambia"/>
+                        <option value="Georgia"/>
+                        <option value="Germany"/>
+                        <option value="Ghana"/>
+                        <option value="Gibraltar"/>
+                        <option value="Great Britain"/>
+                        <option value="Greece"/>
+                        <option value="Greenland"/>
+                        <option value="Grenada"/>
+                        <option value="Guadeloupe"/>
+                        <option value="Guam"/>
+                        <option value="Guatemala"/>
+                        <option value="Guinea"/>
+                        <option value="Guyana"/>
+                        <option value="Haiti"/>
+                        <option value="Hawaii"/>
+                        <option value="Honduras"/>
+                        <option value="Hong Kong"/>
+                        <option value="Hungary"/>
+                        <option value="Iceland"/>
+                        <option value="India"/>
+                        <option value="Indonesia"/>
+                        <option value="Iran"/>
+                        <option value="Iraq"/>
+                        <option value="Ireland"/>
+                        <option value="Isle of Man"/>
+                        <option value="Israel"/>
+                        <option value="Italy"/>
+                        <option value="Jamaica"/>
+                        <option value="Japan"/>
+                        <option value="Jordan"/>
+                        <option value="Kazakhstan"/>
+                        <option value="Kenya"/>
+                        <option value="Kiribati"/>
+                        <option value="Korea North"/>
+                        <option value="Korea Sout"/>
+                        <option value="Kuwait"/>
+                        <option value="Kyrgyzstan"/>
+                        <option value="Laos"/>
+                        <option value="Latvia"/>
+                        <option value="Lebanon"/>
+                        <option value="Lesotho"/>
+                        <option value="Liberia"/>
+                        <option value="Libya"/>
+                        <option value="Liechtenstein"/>
+                        <option value="Lithuania"/>
+                        <option value="Luxembourg"/>
+                        <option value="Macau"/>
+                        <option value="Macedonia"/>
+                        <option value="Madagascar"/>
+                        <option value="Malaysia"/>
+                        <option value="Malawi"/>
+                        <option value="Maldives"/>
+                        <option value="Mali"/>
+                        <option value="Malta"/>
+                        <option value="Marshall Islands"/>
+                        <option value="Martinique"/>
+                        <option value="Mauritania"/>
+                        <option value="Mauritius"/>
+                        <option value="Mayotte"/>
+                        <option value="Mexico"/>
+                        <option value="Midway Islands"/>
+                        <option value="Moldova"/>
+                        <option value="Monaco"/>
+                        <option value="Mongolia"/>
+                        <option value="Montserrat"/>
+                        <option value="Morocco"/>
+                        <option value="Mozambique"/>
+                        <option value="Myanmar"/>
+                        <option value="Nambia"/>
+                        <option value="Nauru"/>
+                        <option value="Nepal"/>
+                        <option value="Netherland Antilles"/>
+                        <option value="Netherlands"/>
+                        <option value="Nevis"/>
+                        <option value="New Caledonia"/>
+                        <option value="New Zealand"/>
+                        <option value="Nicaragua"/>
+                        <option value="Niger"/>
+                        <option value="Nigeria"/>
+                        <option value="Niue"/>
+                        <option value="Norfolk Island"/>
+                        <option value="Norway"/>
+                        <option value="Oman"/>
+                        <option value="Pakistan"/>
+                        <option value="Palau Island"/>
+                        <option value="Palestine"/>
+                        <option value="Panama"/>
+                        <option value="Papua New Guinea"/>
+                        <option value="Paraguay"/>
+                        <option value="Peru"/>
+                        <option value="Phillipines"/>
+                        <option value="Pitcairn Island"/>
+                        <option value="Poland"/>
+                        <option value="Portugal"/>
+                        <option value="Puerto Rico"/>
+                        <option value="Qatar"/>
+                        <option value="Republic of Montenegro"/>
+                        <option value="Republic of Serbia"/>
+                        <option value="Reunion"/>
+                        <option value="Romania"/>
+                        <option value="Russia"/>
+                        <option value="Rwanda"/>
+                        <option value="St Barthelemy"/>
+                        <option value="St Eustatius"/>
+                        <option value="St Helena"/>
+                        <option value="St Kitts-Nevis"/>
+                        <option value="St Lucia"/>
+                        <option value="St Maarten"/>
+                        <option value="St Pierre &amp; Miquelon"/>
+                        <option value="St Vincent &amp; Grenadines"/>
+                        <option value="Saipan"/>
+                        <option value="Samoa"/>
+                        <option value="Samoa American"/>
+                        <option value="San Marino"/>
+                        <option value="Sao Tome &amp; Principe"/>
+                        <option value="Saudi Arabia"/>
+                        <option value="Senegal"/>
+                        <option value="Seychelles"/>
+                        <option value="Sierra Leone"/>
+                        <option value="Singapore"/>
+                        <option value="Slovakia"/>
+                        <option value="Slovenia"/>
+                        <option value="Solomon Islands"/>
+                        <option value="Somalia"/>
+                        <option value="South Africa"/>
+                        <option value="Spain"/>
+                        <option value="Sri Lanka"/>
+                        <option value="Sudan"/>
+                        <option value="Suriname"/>
+                        <option value="Swaziland"/>
+                        <option value="Sweden"/>
+                        <option value="Switzerland"/>
+                        <option value="Syria"/>
+                        <option value="Tahiti"/>
+                        <option value="Taiwan"/>
+                        <option value="Tajikistan"/>
+                        <option value="Tanzania"/>
+                        <option value="Thailand"/>
+                        <option value="Togo"/>
+                        <option value="Tokelau"/>
+                        <option value="Tonga"/>
+                        <option value="Trinidad &amp; Tobago"/>
+                        <option value="Tunisia"/>
+                        <option value="Turkey"/>
+                        <option value="Turkmenistan"/>
+                        <option value="Turks &amp; Caicos Is"/>
+                        <option value="Tuvalu"/>
+                        <option value="Uganda"/>
+                        <option value="Ukraine"/>
+                        <option value="United Arab Erimates"/>
+                        <option value="United Kingdom"/>
+                        <option value="United States of America"/>
+                        <option value="Uraguay"/>
+                        <option value="Uzbekistan"/>
+                        <option value="Vanuatu"/>
+                        <option value="Vatican City State"/>
+                        <option value="Venezuela"/>
+                        <option value="Vietnam"/>
+                        <option value="Virgin Islands (Brit)"/>
+                        <option value="Virgin Islands (USA)"/>
+                        <option value="Wake Island"/>
+                        <option value="Wallis &amp; Futana Is"/>
+                        <option value="Yemen"/>
+                        <option value="Zaire"/>
+                        <option value="Zambia"/>
+                        <option value="Zimbabwe"/>
+                    </constant-options>
+                </choice-field>
+                <choice-field style="SELECT" name="right-to-work.visa.type">
+                    <label>Visa type:</label>
+                    <validation-rules>
+                        <must-have-value error-message="Please specify your visa type"/>
+                    </validation-rules>
+                    <constant-options>
+                        <option value="457"/>
+                        <option value="Other"/>
+                    </constant-options>
+                </choice-field>
+                <input-text-field name="right-to-work.visa.type.other" size="20">
+                    <state-rules>
+                        <conditional-state state-name="REQUIRED">
+                            <condition-set>
+                                <field-equal field-name="right-to-work.visa.type"
+                                    >Other</field-equal>
+                            </condition-set>
+                        </conditional-state>
+                        <default-state state-name="HIDDEN"/>
+                    </state-rules>
+                    <label>Visa Type (Other):</label>
+                    <validation-rules>
+                        <must-have-value error-message="Please specify your visa type"/>
+                    </validation-rules>
+                </input-text-field>
+                <input-text-field name="right-to-work.visa.number" size="20">
+                    <label>Visa Number:</label>
+                    <validation-rules>
+                        <must-have-value error-message="Please provide your visa number"/>
+                    </validation-rules>
+                </input-text-field>
+                <date-field name="right-to-work.visa.issue-date">
+                    <label>Visa Issue Date:</label>
+                    <validation-rules>
+                        <must-have-value error-message="Please provide your visa's date of issue"/>
+                    </validation-rules>
+                    <format>
+                        <day-element/>
+                        <month-element/>
+                        <year-element/>
+                        <select-from offset="-P20Y"/>
+                        <select-to offset="P0D"/>
+                    </format>
+                </date-field>
+                <date-field name="right-to-work.visa.expiry-date">
+                    <label>Visa Expiry Date:</label>
+                    <validation-rules>
+                        <must-have-value error-message="Please provide your visa's date of expiry"/>
+                    </validation-rules>
+                    <format>
+                        <day-element/>
+                        <month-element/>
+                        <year-element/>
+                        <select-from offset="P0D"/>
+                        <select-to offset="P15Y"/>
+                    </format>
+                </date-field>
+            </group>
+        </group>
+    </page>
+    <page name="Experience">
+        <title>Section 4: Experience</title>
+        <group>
+            <title>Project Experience</title>
+            <choice-field style="RADIO" name="experience.acme-employee"
+                field-layout-name="wide-label">
+                <label>Have you ever been employed by us? </label>
+                <validation-rules>
+                    <must-have-value
+                        error-message="Please specify whether you have been previous employed by us"
+                    />
+                </validation-rules>
+                <constant-options>
+                    <option value="Yes"/>
+                    <option value="No"/>
+                </constant-options>
+            </choice-field>
+            <input-text-field name="experience.acme-employee.duration"
+                field-layout-name="wide-label" size="4">
+                <state-rules>
+                    <conditional-state state-name="REQUIRED">
+                        <condition-set>
+                            <field-equal field-name="experience.acme-employee">Yes</field-equal>
+                        </condition-set>
+                    </conditional-state>
+                    <default-state state-name="HIDDEN"/>
+                </state-rules>
+                <label>Years employed:</label>
+                <validation-rules>
+                    <regex-match
+                        error-message="Please specify the number of years you have been employed by us"
+                    >[0-9]+</regex-match>
+                </validation-rules>
+            </input-text-field>
+            <input-text-field name="experience.industry-duration" field-layout-name="wide-label"
+                size="4">
+                <label>Years employed in the IT sector:</label>
+                <validation-rules>
+                    <regex-match error-message="Please specify the number of years">[0-9]+</regex-match>
+                </validation-rules>
+            </input-text-field>
+        </group>
+        <group>
+            <title>Qualifications</title>
+            <choice-field style="SELECT" name="qualifications.highest-level">
+                <label>Highest Education or Trade Level achieved:</label>
+                <validation-rules>
+                    <must-have-value error-message="Please specify your highest qualification"/>
+                </validation-rules>
+                <constant-options>
+                    <option value="Secondary School"/>
+                    <option value="Trade Certification"/>
+                    <option value="Diploma/Certificate"/>
+                    <option value="Bachelor Degree"/>
+                    <option value="Master's Degree"/>
+                    <option value="PhD"/>
+                </constant-options>
+            </choice-field>
+            <input-text-field name="qualifications.organization" size="30">
+                <label>Name of organization or institution:</label>
+                <validation-rules>
+                    <must-have-value error-message="Please provide the name of the organization"/>
+                </validation-rules>
+            </input-text-field>
+            <date-field name="qualifications.year-attained">
+                <label>Year completed:</label>
+                <validation-rules>
+                    <must-have-value
+                        error-message="Please specify the year you attained your qualification"/>
+                </validation-rules>
+                <format>
+                    <year-element/>
+                    <select-from offset="-P60Y"/>
+                    <select-to offset="P0D"/>
+                </format>
+            </date-field>
+        </group>
+    </page>
+    <page name="Employment History">
+        <title>Section 5: Employment History</title>
+        <description>Beginning with your current or most recent employment, please provide details
+            of upto three (3) periods of employment within the last five (5) years.</description>
+        <group>
+            <input-text-field name="prev.role.1.company-name" size="20">
+                <label>Company Name:</label>
+                <validation-rules>
+                    <must-have-value
+                        error-message="Please provide the name of the company you worked for"/>
+                </validation-rules>
+            </input-text-field>
+            <input-text-field name="prev.role.1.position" size="20">
+                <label>Position Held:</label>
+                <validation-rules>
+                    <must-have-value
+                        error-message="Please provide the name of the position you worked in"/>
+                </validation-rules>
+            </input-text-field>
+            <date-field name="prev.role.1.from-date">
+                <label>Employed From:</label>
+                <validation-rules>
+                    <must-have-value
+                        error-message="Please specify the start date of your employment"/>
+                </validation-rules>
+                <format>
+                    <month-element/>
+                    <year-element/>
+                    <select-from offset="-P5Y"/>
+                    <select-to offset="P0D"/>
+                </format>
+            </date-field>
+            <date-field name="prev.role.1.to-date">
+                <label>Employed Until:</label>
+                <validation-rules>
+                    <must-have-value error-message="Please specify the end date of your employment"
+                    />
+                </validation-rules>
+                <format>
+                    <month-element/>
+                    <year-element/>
+                    <select-from offset="-P5Y"/>
+                    <select-to offset="P0D"/>
+                </format>
+            </date-field>
+            <text-area-field name="prev.role.1.responsibilities" cols="40" rows="5">
+                <label>Main Duties and Responsibilities:</label>
+                <validation-rules>
+                    <must-have-value
+                        error-message="Please outline your main duties and responsibilities"/>
+                </validation-rules>
+            </text-area-field>
+            <text-area-field name="prev.role.1.reason-for-leaving" cols="40" rows="5">
+                <state-rules>
+                    <default-state state-name="OPTIONAL"/>
+                </state-rules>
+                <label>Reasons for Leaving:</label>
+            </text-area-field>
+            <input-text-field name="prev.role.1.contact.name" size="20">
+                <label>Contact Name:</label>
+                <validation-rules>
+                    <must-have-value error-message="Please provide the name of a contact"/>
+                </validation-rules>
+            </input-text-field>
+            <input-text-field name="prev.role.1.contact.number" size="20">
+                <label>Contact Number:</label>
+                <validation-rules>
+                    <regex-match error-message="Please provide the contact number of a contact"
+                        >[0-9]+</regex-match>
+                </validation-rules>
+            </input-text-field>
+        </group>
+        <group>
+            <choice-field name="prev.role.2.enabled" style="RADIO">
+                <label>Add another previous role?</label>
+                <validation-rules>
+                    <must-have-value error-message="Please make a choice"/>
+                </validation-rules>
+                <constant-options>
+                    <option value="Yes"/>
+                    <option value="No"/>
+                </constant-options>
+            </choice-field>
+        </group>
+    </page>
+    <page name="Employment History (2)">
+        <title>Section 5: Employment History</title>
+        <state-rules>
+            <conditional-state state-name="REQUIRED">
+                <condition-set>
+                    <field-equal field-name="prev.role.2.enabled">Yes</field-equal>
+                </condition-set>
+            </conditional-state>
+            <default-state state-name="HIDDEN"/>
+        </state-rules>
+        <group>
+            <input-text-field name="prev.role.2.company-name" size="20">
+                <label>Company Name:</label>
+                <validation-rules>
+                    <must-have-value
+                        error-message="Please provide the name of the company you worked for"/>
+                </validation-rules>
+            </input-text-field>
+            <input-text-field name="prev.role.2.position" size="20">
+                <label>Position Held:</label>
+                <validation-rules>
+                    <must-have-value
+                        error-message="Please provide the name of the position you worked in"/>
+                </validation-rules>
+            </input-text-field>
+            <date-field name="prev.role.2.from-date">
+                <label>Employed From:</label>
+                <validation-rules>
+                    <must-have-value
+                        error-message="Please specify the start date of your employment"/>
+                </validation-rules>
+                <format>
+                    <month-element/>
+                    <year-element/>
+                    <select-from offset="-P5Y"/>
+                    <select-to offset="P0D"/>
+                </format>
+            </date-field>
+            <date-field name="prev.role.2.to-date">
+                <label>Employed Until:</label>
+                <validation-rules>
+                    <must-have-value error-message="Please specify the end date of your employment"
+                    />
+                </validation-rules>
+                <format>
+                    <month-element/>
+                    <year-element/>
+                    <select-from offset="-P5Y"/>
+                    <select-to offset="P0D"/>
+                </format>
+            </date-field>
+            <text-area-field name="prev.role.2.responsibilities" cols="40" rows="5">
+                <label>Main Duties and Responsibilities:</label>
+                <validation-rules>
+                    <must-have-value
+                        error-message="Please outline your main duties and responsibilities"/>
+                </validation-rules>
+            </text-area-field>
+            <text-area-field name="prev.role.2.reason-for-leaving" cols="40" rows="5">
+                <state-rules>
+                    <default-state state-name="OPTIONAL"/>
+                </state-rules>                
+                <label>Reasons for Leaving:</label>
+            </text-area-field>
+            <input-text-field name="prev.role.2.contact.name" size="20">
+                <label>Contact Name:</label>
+                <validation-rules>
+                    <must-have-value error-message="Please provide the name of a contact"/>
+                </validation-rules>
+            </input-text-field>
+            <input-text-field name="prev.role.2.contact.number" size="20">
+                <label>Contact Number:</label>
+                <validation-rules>
+                    <regex-match error-message="Please provide the contact number of a contact"
+                    >[0-9]+</regex-match>
+                </validation-rules>
+            </input-text-field>
+        </group>
+        <group>
+            <choice-field name="prev.role.3.enabled" style="RADIO">
+                <label>Add another previous role?</label>
+                <validation-rules>
+                    <must-have-value error-message="Please make a choice"/>
+                </validation-rules>
+                <constant-options>
+                    <option value="Yes"/>
+                    <option value="No"/>
+                </constant-options>
+            </choice-field>
+        </group>
+    </page>
+    <page name="Employment History (3)">
+        <title>Section 5: Employment History</title>
+        <state-rules>
+            <conditional-state state-name="REQUIRED">
+                <condition-set>
+                    <field-equal field-name="prev.role.3.enabled">Yes</field-equal>
+                </condition-set>
+            </conditional-state>
+            <default-state state-name="HIDDEN"/>
+        </state-rules>
+        <group>
+            <input-text-field name="prev.role.3.company-name" size="20">
+                <label>Company Name:</label>
+                <validation-rules>
+                    <must-have-value
+                        error-message="Please provide the name of the company you worked for"/>
+                </validation-rules>
+            </input-text-field>
+            <input-text-field name="prev.role.3.position" size="20">
+                <label>Position Held:</label>
+                <validation-rules>
+                    <must-have-value
+                        error-message="Please provide the name of the position you worked in"/>
+                </validation-rules>
+            </input-text-field>
+            <date-field name="prev.role.3.from-date">
+                <label>Employed From:</label>
+                <validation-rules>
+                    <must-have-value
+                        error-message="Please specify the start date of your employment"/>
+                </validation-rules>
+                <format>
+                    <month-element/>
+                    <year-element/>
+                    <select-from offset="-P5Y"/>
+                    <select-to offset="P0D"/>
+                </format>
+            </date-field>
+            <date-field name="prev.role.3.to-date">
+                <label>Employed Until:</label>
+                <validation-rules>
+                    <must-have-value error-message="Please specify the end date of your employment"
+                    />
+                </validation-rules>
+                <format>
+                    <month-element/>
+                    <year-element/>
+                    <select-from offset="-P5Y"/>
+                    <select-to offset="P0D"/>
+                </format>
+            </date-field>
+            <text-area-field name="prev.role.3.responsibilities" cols="40" rows="5">
+                <label>Main Duties and Responsibilities:</label>
+                <validation-rules>
+                    <must-have-value
+                        error-message="Please outline your main duties and responsibilities"/>
+                </validation-rules>
+            </text-area-field>
+            <text-area-field name="prev.role.3.reason-for-leaving" cols="40" rows="5">
+                <state-rules>
+                    <default-state state-name="OPTIONAL"/>
+                </state-rules>                
+                <label>Reasons for Leaving:</label>
+            </text-area-field>
+            <input-text-field name="prev.role.3.contact.name" size="20">
+                <label>Contact Name:</label>
+                <validation-rules>
+                    <must-have-value error-message="Please provide the name of a contact"/>
+                </validation-rules>
+            </input-text-field>
+            <input-text-field name="prev.role.3.contact.number" size="20">
+                <label>Contact Number:</label>
+                <validation-rules>
+                    <regex-match error-message="Please provide the contact number of a contact"
+                        >[0-9]+</regex-match>
+                </validation-rules>
+            </input-text-field>
+        </group>
+    </page>
+    <page name="Resume">
+        <title>Section 6: Resume</title>
+        <description>Please submit your resume in a document format (doc, docx rtf, pdf, txt - no
+            images, please).</description>
+        <group>
+            <file-attachment-field name="resume.attach"
+                restrict-to-file-types="doc docx rtf pdf txt" maximum-file-size="5242880">
+                <label>Resume:</label>
+                <validation-rules>
+                    <must-have-value error-message="Please attach your resume"/>
+                </validation-rules>
+            </file-attachment-field>
+        </group>
+    </page>
+    <submission-page name="Submission">
+        <title>Submission</title>
+        <group>
+            <asset>
+                <content><![CDATA[
+                        <p>
+                            You have almost completed the job application. Please verify that all details are correct and press the <em>Submit Application</em>
+                            button.
+                        </p>
+                        ]]></content>
+            </asset>
+        </group>
+    </submission-page>
+    <policy encrypt="NONE" single-session-per-owner="false">
+        <park-when-idle-period>PT3M</park-when-idle-period>
+        <retention-period>
+            <incomplete-forms>PT12M</incomplete-forms>
+            <!--incomplete-forms>PT12H</incomplete-forms-->
+            <complete-forms>P2M</complete-forms>
+        </retention-period>
+    </policy>
+    <controls>
+        <start>START</start>
+        <next-page enforce-validation="true">NEXT</next-page>
+        <previous-page>PREVIOUS</previous-page>
+        <submit-form prompt="Please confirm that you are ready to submit" percentage-complete="70"
+            >SUBMIT</submit-form>
+        <quit-form
+            prompt="Please confirm that you would like to exit, all your data will be deleted"
+            >QUIT</quit-form>
+    </controls>
+    <form-layout maximise-on-start="false" max-pages-displayed="3"/>
+    <layouts>
+        <field-layout name="wide-label">
+            <for-label style="width: 400px; float: left;"/>
+        </field-layout>
+        <asset-layout name="frontpage">
+            <for-content style="margin: 0 auto; width: 75%;"/>
+        </asset-layout>
+    </layouts>
+    <states>
+        <state name="REQUIRED" hidden="false" disabled="false" required="true"/>
+        <state name="OPTIONAL" hidden="false" disabled="false" required="false"/>
+        <state name="HIDDEN" hidden="true" disabled="false" required="false"/>
+        <state name="READONLY" hidden="false" disabled="false" required="false" readonly="true"/>
+        <precedence-rules>
+            <precedence-rule>
+                <parent-state-name>REQUIRED</parent-state-name>
+                <child-state-name-pattern>^()$</child-state-name-pattern>
+                <derived-state-name>REQUIRED</derived-state-name>
+            </precedence-rule>
+            <precedence-rule>
+                <parent-state-name>HIDDEN</parent-state-name>
+                <child-state-name-pattern>^()$</child-state-name-pattern>
+                <derived-state-name>HIDDEN</derived-state-name>
+            </precedence-rule>
+            <precedence-rule>
+                <parent-state-name>OPTIONAL</parent-state-name>
+                <child-state-name-pattern>REQUIRED</child-state-name-pattern>
+                <derived-state-name>REQUIRED</derived-state-name>
+            </precedence-rule>
+        </precedence-rules>
+    </states>
+</smartform>
