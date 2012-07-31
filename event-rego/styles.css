@@ -1,0 +1,65 @@
+.smartform-runtime div.container.required > div.field > div.control > textarea,
+.smartform-runtime div.container.required > div.field > div.control > input,
+.smartform-runtime div.container.required > div.field > div.control > select {
+  border: thin solid red;
+  background: #fee none;
+}
+
+.smartform-runtime div.container.readonly > div.field > div.control > textarea,
+.smartform-runtime div.container.readonly > div.field > div.control > input,
+.smartform-runtime div.container.readonly > div.field > div.control > select {
+  background: #eee none;
+}
+
+
+.smartform-runtime .start-page, .smartform-runtime .start-controls {
+  text-align:center;
+}
+
+.smartform-runtime .vertical-options label {
+  display: block;
+  padding-bottom: 1ex;
+}
+
+.smartform-runtime .vertical-options label:last-child {
+  padding-bottom: inherit;
+}
+
+.smartform-runtime .horizontal-options label {
+  padding-right: 1em;
+}
+
+.smartform-runtime .horizontal-options label:last-child {
+  padding-right: inherit;
+}
+
+
+.smartform-runtime div.clrfix { 
+  overflow:hidden;
+  zoom:1
+}
+
+.smartform-runtime div.il-blk {
+  float:left;
+}
+
+.smartform-runtime div.il-blk div.field > label,
+.smartform-runtime div.auto-lbl div.field > label {
+  width:auto;
+}
+
+.smartform-runtime div.field > label, 
+.smartform-runtime div.il-blk div.field > label.first-item {
+  width: 10ex;
+  padding-right: 1ex;
+  display: inline-block;
+  text-align: right;
+}
+
+.smartform-runtime input[type='text'], .smartform-runtime select{
+  padding: 0.5ex 1ex;
+}
+
+.smartform-runtime div.group, .smartform-runtime div.asset, .smartform-runtime div.field {
+  margin: 1ex 0;
+}

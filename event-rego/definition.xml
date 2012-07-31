@@ -1,0 +1,402 @@
+<?xml version="1.0"?>
+<smartform xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="file:///D:/com.myoffice/smartforms/resource/definition-schema.12.xsd">
+ <description>MyOffice24x7 Smartforms Cloud Information Sessions Registration</description>
+ <start-page>
+  <title>MyOffice24x7 SmartForms Cloud Information Session Registration</title>
+  <description><![CDATA[This form allows up to three people to register for one of the SmartForms Cloud Information Sessions taking place in Brisbane, Sydney and Melbourne]]></description>
+ </start-page>
+
+ <completed-page>
+  <title>Registration Completed</title>
+  <asset>
+   <content>
+    <![CDATA[
+     Your registration has been recorded and your eTicket emailed. Please allow up to 24 hours for delivery. 
+    ]]>
+   </content>
+  </asset>
+ </completed-page>
+
+  <page name="Attendee Details">
+    <title>Attendee Details</title>
+
+    <group>
+      <state-rules>
+        <default-state state-name="REQUIRED" />
+      </state-rules>
+      <choice-field name='attendee.count' style="SELECT" field-layout-name="auto-label-width">
+        <title><![CDATA[<h3>1. Registration Information</h3>]]></title>
+        <label><![CDATA[Select number of people you wish to register:]]></label>
+        <constant-options>
+         <option value='1' />
+         <option value='2' />
+         <option value='3' />
+        </constant-options>
+      </choice-field>
+      
+      <input-text-field name="attendee.organisation" size="40" field-layout-name="auto-label-width">
+       <label><![CDATA[Company/Organisation Name:]]></label>
+       <validation-rules>
+        <must-have-value error-message="Field is required"/>
+       </validation-rules>
+      </input-text-field>
+    </group>
+    
+    <group group-layout-name="clearfix-block">
+     <title>Attendee 1</title>
+     <state-rules>
+       <default-state state-name="REQUIRED" />
+     </state-rules>
+
+     <choice-field name="attendee.1.title" style="SELECT" field-layout-name="first-inline-block">
+      <label>Name:</label>
+      <constant-options>
+       <option value='Mr' />
+       <option value='Mrs' />
+       <option value='Miss' />
+       <option value='Ms' />
+      </constant-options>
+     </choice-field>
+     <input-text-field name="attendee.1.firstname" field-layout-name="inline-block" size="15">
+      <validation-rules>
+       <must-have-value error-message="Field is required"/>
+      </validation-rules>
+     </input-text-field>    
+     <input-text-field name="attendee.1.lastname" field-layout-name="inline-block" size="15">
+      <validation-rules>
+       <must-have-value error-message="Field is required"/>
+      </validation-rules>
+     </input-text-field>
+    </group>
+    
+    <group>    
+     <title>Address</title>
+     <state-rules>
+      <default-state state-name='OPTIONAL' />
+     </state-rules>
+     <input-text-field name="attendee.1.address" size="40">
+      <label>Street:</label>
+     </input-text-field>  
+     <input-text-field name="attendee.1.city" size="15">
+      <label>City:</label>
+     </input-text-field>  
+     <input-text-field name="attendee.1.state" size="15">
+      <label>State:</label>
+     </input-text-field>  
+     <input-text-field name="attendee.1.zip" size="4">
+      <label>Zip:</label>
+     </input-text-field>
+    </group>
+     
+    <group>
+     <state-rules>
+      <default-state state-name="REQUIRED" />
+     </state-rules>
+     <input-text-field name="attendee.1.telephone" size="15">
+      <label>Telephone:</label>         
+      <validation-rules>
+       <must-have-value error-message="Field is required"/>
+      </validation-rules>
+     </input-text-field>
+     <input-text-field name="attendee.1.cell" size="15">
+      <label>Cell:</label>         
+      <validation-rules>
+       <must-have-value error-message="Field is required"/>
+      </validation-rules>
+     </input-text-field>
+     <input-text-field name="attendee.1.email" size="40">
+      <label>Email:</label>         
+      <validation-rules>
+       <must-have-value error-message="Field is required"/>
+      </validation-rules>
+     </input-text-field>
+    </group>  
+
+
+    <group>
+     <state-rules>
+       <conditional-state state-name="OPTIONAL">
+        <condition-set operator="OR">
+         <field-equal field-name="attendee.count">2</field-equal>
+         <field-equal field-name="attendee.count">3</field-equal>
+        </condition-set>
+       </conditional-state>
+       <default-state state-name="HIDDEN" />
+     </state-rules>
+     <group group-layout-name="clearfix-block">
+      <title>Attendee 2</title>
+      <state-rules>
+        <default-state state-name="REQUIRED" />
+      </state-rules>
+ 
+      <choice-field name="attendee.2.title" style="SELECT" field-layout-name="first-inline-block">
+       <label>Name:</label>
+       <constant-options>
+        <option value='Mr' />
+        <option value='Mrs' />
+        <option value='Miss' />
+        <option value='Ms' />
+       </constant-options>
+      </choice-field>
+      <input-text-field name="attendee.2.firstname" size="15" field-layout-name="inline-block">
+       <validation-rules>
+        <must-have-value error-message="Field is required"/>
+       </validation-rules>
+      </input-text-field>    
+      <input-text-field name="attendee.2.lastname" size="15" field-layout-name="inline-block">
+       <validation-rules>
+        <must-have-value error-message="Field is required"/>
+       </validation-rules>
+      </input-text-field>
+     </group>
+     
+     <group>    
+      <title>Address</title>
+      <state-rules>
+       <default-state state-name='OPTIONAL' />
+      </state-rules>
+      <input-text-field name="attendee.2.address" size="40">
+       <label>Street:</label>
+      </input-text-field>  
+      <input-text-field name="attendee.2.city" size="15">
+       <label>City:</label>
+      </input-text-field>  
+      <input-text-field name="attendee.2.state" size="15">
+       <label>State:</label>
+      </input-text-field>  
+      <input-text-field name="attendee.2.zip" size="4">
+       <label>Zip:</label>
+      </input-text-field>
+     </group>
+      
+     <group>
+      <state-rules>
+       <default-state state-name="REQUIRED" />
+      </state-rules>
+      <input-text-field name="attendee.2.telephone" size="15">
+       <label>Telephone:</label>         
+       <validation-rules>
+        <must-have-value error-message="Field is required"/>
+       </validation-rules>
+      </input-text-field>
+      <input-text-field name="attendee.2.cell" size="15">
+       <label>Cell:</label>         
+       <validation-rules>
+        <must-have-value error-message="Field is required"/>
+       </validation-rules>
+      </input-text-field>
+      <input-text-field name="attendee.2.email" size="40">
+       <label>Email:</label>         
+       <validation-rules>
+        <must-have-value error-message="Field is required"/>
+       </validation-rules>
+      </input-text-field>
+     </group>  
+    </group>
+
+
+    <group>
+     <state-rules>
+       <conditional-state state-name="OPTIONAL">
+        <condition-set operator="OR">
+         <field-equal field-name="attendee.count">3</field-equal>
+        </condition-set>
+       </conditional-state>
+       <default-state state-name="HIDDEN" />
+     </state-rules>
+     <group group-layout-name="clearfix-block">
+      <title>Attendee 3</title>
+      <state-rules>
+        <default-state state-name="REQUIRED" />
+      </state-rules>
+      <choice-field name="attendee.3.title" style="SELECT" field-layout-name="first-inline-block">
+       <label>Name:</label>
+       <constant-options>
+        <option value='Mr' />
+        <option value='Mrs' />
+        <option value='Miss' />
+        <option value='Ms' />
+       </constant-options>
+      </choice-field>
+      <input-text-field name="attendee.3.firstname" size="15" field-layout-name="inline-block">
+       <validation-rules>
+        <must-have-value error-message="Field is required"/>
+       </validation-rules>
+      </input-text-field>    
+      <input-text-field name="attendee.3.lastname" size="15" field-layout-name="inline-block">
+       <validation-rules>
+        <must-have-value error-message="Field is required"/>
+       </validation-rules>
+      </input-text-field>
+     </group>
+     
+     <group>    
+      <title>Address</title>
+      <state-rules>
+       <default-state state-name='OPTIONAL' />
+      </state-rules>
+      <input-text-field name="attendee.3.address" size="40">
+       <label>Street:</label>
+      </input-text-field>  
+      <input-text-field name="attendee.3.city" size="15">
+       <label>City:</label>
+      </input-text-field>  
+      <input-text-field name="attendee.3.state" size="15">
+       <label>State:</label>
+      </input-text-field>  
+      <input-text-field name="attendee.3.zip" size="4">
+       <label>Zip:</label>
+      </input-text-field>
+     </group>
+      
+     <group>
+      <state-rules>
+       <default-state state-name="REQUIRED" />
+      </state-rules>
+      <input-text-field name="attendee.3.telephone" size="15">
+       <label>Telephone:</label>         
+       <validation-rules>
+        <must-have-value error-message="Field is required"/>
+       </validation-rules>
+      </input-text-field>
+      <input-text-field name="attendee.3.cell" size="15">
+       <label>Cell:</label>         
+       <validation-rules>
+        <must-have-value error-message="Field is required"/>
+       </validation-rules>
+      </input-text-field>
+      <input-text-field name="attendee.3.email" size="40">
+       <label>Email:</label>         
+       <validation-rules>
+        <must-have-value error-message="Field is required"/>
+       </validation-rules>
+      </input-text-field>
+     </group>  
+    </group>
+
+   </page>
+
+
+  <page name="Session Selection">
+    <title><![CDATA[Session Selection]]></title>       
+
+    <choice-field name="session" style="RADIO" field-layout-name="vertical-options">
+     <title>
+      <![CDATA[
+       <h3>2. Select the information session you wish to attend</h3>
+       <p>If you are unable attend the session in your region, you are welcome to register to attend any other session.</p>                 
+      ]]>
+     </title>
+     <validation-rules>
+      <must-have-value error-message="Field is required"/>
+     </validation-rules>
+     <constant-options>
+      <option value='Sydney'><![CDATA[Sydney Convention Centre, Harborview Room - Tuesday, July 17<sup>th</sup> 10 AM - 2 PM]]></option>
+      <option value='Melbourne'><![CDATA[Melbourne Convention Centre, Mathew Flinders Room - Wednesday, July 18<sup>th</sup> 10 AM - 2 PM]]></option>
+      <option value='Brisbane'><![CDATA[Brisbane Convention & Exhibition Centre, Premier Room - Thursday, July 19<sup>th</sup> 10 AM - 2 PM]]></option>
+     </constant-options>
+    </choice-field>
+ 
+    <choice-field name="meal" style="CHECKBOX">
+     <title>
+      <![CDATA[
+       <h3>3. For catering purposes, please indicate any special meal preference/s:</h3>
+      ]]>
+     </title>
+     <state-rules>
+      <default-state state-name="OPTIONAL" />
+     </state-rules>
+     <validation-rules>
+      <must-have-value error-message="Field is required"/>
+     </validation-rules>
+     <constant-options>
+      <option value='Halal' />
+      <option value='Kosher' />
+      <option value='Gluten Free' />
+      <option value='Vegetarian' />
+     </constant-options>
+    </choice-field>
+
+
+  </page>        
+  
+ <submission-page name="Final Page">
+  <asset>
+   <content>
+    <![CDATA[
+     <h3>What Now?</h3>
+     <p>Once you hit the submit button below, you will receive an email with a PDF eTicket attached. Print out this eTicket and bring it with you to your chosen seminar.</p>
+     <p>If you do not receive your eTicket within 24 hours of submission, please contact MyOffice24x7 Pty Ltd.</p> 
+    ]]>
+   </content>
+  </asset>
+ </submission-page>
+ 
+  <policy encrypt="NONE">
+    <park-when-idle-period>PT5M</park-when-idle-period>
+    <retention-period>
+      <incomplete-forms>P12D</incomplete-forms>
+      <complete-forms>P60D</complete-forms>
+    </retention-period>
+  </policy>
+  <controls>
+    <start>Begin</start>
+    <next-page enforce-validation="true">Continue</next-page>
+    <previous-page>Go Back</previous-page>
+    <submit-form prompt="Please confirm that you are ready to submit" percentage-complete="100">Submit</submit-form>
+    <!-- <reset-page label="Reset Page" prompt="Please confirm that you are ready to reset all fields on this page" /> -->
+    <restart-form>Restart Form</restart-form>
+    <quit-form prompt="Please confirm that you would like to quit (all your information will be deleted)">Quit Form</quit-form> 
+  </controls>
+  <layouts>
+   <field-layout name="inline-block">
+    <for-container class='il-blk' />
+   </field-layout>
+
+   <field-layout name="first-inline-block">
+    <for-container class='il-blk' />
+    <for-label class='first-item' />
+   </field-layout>
+
+   <field-layout name="auto-label-width">
+    <for-container class='auto-lbl' />
+   </field-layout>
+
+   <field-layout name="vertical-options">
+     <for-container class="vertical-options" />
+     <for-label class='default'/>
+   </field-layout>
+   
+   <field-layout name="horizontal-options">
+     <for-container class="horizontal-options" />
+     <for-label class='default'/>
+   </field-layout>
+   
+   <group-layout name="clearfix-block">
+    <for-container class='clrfix' />
+   </group-layout>
+  </layouts>
+  <states>
+    <state name="REQUIRED" hidden="false" disabled="false" required="true"/>
+    <state name="OPTIONAL" hidden="false" disabled="false" required="false"/>
+    <state name="HIDDEN" hidden="true" disabled="false" required="false"/>
+    <precedence-rules>
+      <precedence-rule>
+        <parent-state-name>REQUIRED</parent-state-name>
+        <child-state-name-pattern>^()$</child-state-name-pattern>
+        <derived-state-name>REQUIRED</derived-state-name>
+      </precedence-rule>
+      <precedence-rule>
+        <parent-state-name>HIDDEN</parent-state-name>
+        <child-state-name-pattern>.*</child-state-name-pattern>
+        <derived-state-name>HIDDEN</derived-state-name>
+      </precedence-rule>
+      <precedence-rule>
+        <parent-state-name>OPTIONAL</parent-state-name>
+        <child-state-name-pattern>^()$</child-state-name-pattern>
+        <derived-state-name>OPTIONAL</derived-state-name>
+      </precedence-rule>
+    </precedence-rules>
+  </states>   
+
+</smartform>
