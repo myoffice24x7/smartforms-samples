@@ -1,0 +1,635 @@
+<smartform xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="http://downloads.smartforms.myoffice24x7.com/definition-schema.latest.xsd"
+    child-layouts="non-bold-label top-label wide-label">
+
+    <description>Health Insurance Quote Request Form</description>
+
+    <start-page page-layouts="insurance-start-page">
+        <title>Get a Quote for Your Health Insurance</title>
+        <asset>
+            <content><![CDATA[
+                <div class="smartform-clearfix">
+                    <img style="float: left; height: 150px;" src="//downloads.smartforms.myoffice24x7.com/frontpage-flow.gif"/>
+                    <div style="float: left;margin: 0 25px 0 25px; width: 50%; position: relative; height: 145px;">
+                        <p>XXX can help you make the right health insurance choice for you and your family.</p>
+                        <p>Spend a couple of minutes telling us what you're looking for, and we'll come up with
+                            the policy options best suited to you.</p>
+                        <button style="position: absolute; bottom: 0;" onclick="$('.smartform-runtime .start-controls button').click();">Get Started Now</button>
+                    </div>
+                </div>
+            ]]>
+            </content>
+        </asset>
+    </start-page>
+
+    <page name="About Me">
+        <group>
+            <description><![CDATA[<p>
+                        We offer a wide range of policies for individuals, couples and families.
+                    </p><p>
+                        Provide us with some basic information and we will find the right level of
+                        cover for you.
+                        </p>]]></description>
+            <group>
+                <title>About Me</title>
+                <choice-field style="SELECT" name="who">
+                    <label>I'm looking for cover for:</label>
+                    <validation-rules>
+                        <must-have-value error-message="For whom is this coverage intended?"/>
+                    </validation-rules>
+                    <constant-options>
+                        <option value="me">Just me</option>
+                        <option value="couple">Me and my partner</option>
+                        <option value="family">My family</option>
+                    </constant-options>
+                </choice-field>
+                <group group-layouts="green-group">
+                    <state-rules>
+                        <conditional-state state-name="REQUIRED">
+                            <condition-set>
+                                <field-has-value field-name="who"/>
+                            </condition-set>
+                        </conditional-state>
+                        <default-state state-name="HIDDEN"/>
+                    </state-rules>
+                    <date-field name="me.dob">
+                        <label>My date of birth:</label>
+                        <validation-rules>
+                            <must-have-value error-message="Please provide your date of birth."/>
+                        </validation-rules>
+                        <format>
+                            <month-element/>
+                            <year-element/>
+                            <select-from offset="-P100Y"/>
+                            <select-to offset="-P18Y"/>
+                        </format>
+                    </date-field>
+                    <date-field name="partner.dob">
+                        <state-rules>
+                            <conditional-state state-name="REQUIRED">
+                                <condition-set operator="OR">
+                                    <field-equal field-name="who">couple</field-equal>
+                                    <field-equal field-name="who">family</field-equal>
+                                </condition-set>
+                            </conditional-state>
+                            <default-state state-name="HIDDEN"/>
+                        </state-rules>
+                        <label>Partner's date of birth:</label>
+                        <validation-rules>
+                            <must-have-value
+                                error-message="Please provide your partner's date of birth."/>
+                        </validation-rules>
+                        <format>
+                            <month-element/>
+                            <year-element/>
+                            <select-from offset="-P100Y"/>
+                            <select-to offset="-P18Y"/>
+                        </format>
+                    </date-field>
+                    <input-text-field size="5" name="children">
+                        <state-rules>
+                            <conditional-state state-name="REQUIRED">
+                                <condition-set>
+                                    <field-equal field-name="who">family</field-equal>
+                                </condition-set>
+                            </conditional-state>
+                            <default-state state-name="HIDDEN"/>
+                        </state-rules>
+                        <label>Number of children:</label>
+                        <validation-rules>
+                            <regex-match error-message="How many children do you have?"
+                                >[0-9]+</regex-match>
+                        </validation-rules>
+                    </input-text-field>
+                    <choice-field style="SELECT" name="hi.cover.where">
+                        <label>I live in:</label>
+                        <validation-rules>
+                            <must-have-value error-message="Where do you live?"/>
+                        </validation-rules>
+                        <constant-options>
+                            <option value="NSW">New South Wales</option>
+                            <option value="ACT">Australian Capital Territory</option>
+                            <option value="VIC">Victoria</option>
+                            <option value="QLD">Queensland</option>
+                            <option value="SA">South Australia</option>
+                            <option value="WA">Western Australia</option>
+                            <option value="NT">Northern Territory</option>
+                        </constant-options>
+                    </choice-field>
+                </group>
+            </group>
+            <choice-field style="SELECT" name="priority">
+                <label>My main priority is:</label>
+                <validation-rules>
+                    <must-have-value
+                        error-message="What is your main priority when choosing a policy?"/>
+                </validation-rules>
+                <constant-options>
+                    <option value="I want cover to avoid taxes and penalties"/>
+                    <option value="I am planning on having children"/>
+                    <option value="I have cover and want better value"/>
+                    <option value="I have a specific medical need"/>
+                    <option value="Other"/>
+                </constant-options>
+            </choice-field>
+            <input-text-field size="40" name="priority.other">
+                <state-rules>
+                    <conditional-state state-name="REQUIRED">
+                        <condition-set>
+                            <field-equal field-name="priority">Other</field-equal>
+                        </condition-set>
+                    </conditional-state>
+                    <default-state state-name="HIDDEN"/>
+                </state-rules>
+                <validation-rules>
+                    <must-have-value error-message="What is your main priority?"/>
+                </validation-rules>
+            </input-text-field>
+        </group>
+    </page>
+
+    <page name="My Benefits">
+        <group>
+            <title>Select your benefits</title>
+            <choice-field style="SELECT" name="benefit.types">
+                <label>The policy should include:</label>
+                <default-value>
+                    <constant>extras.hospital</constant>
+                </default-value>
+                <constant-options>
+                    <option value="extras.hospital">Extras &amp; Hospital Cover</option>
+                    <option value="extras">Extras Cover only</option>
+                    <option value="hospital">Hospital Cover only</option>
+                </constant-options>
+            </choice-field>
+        </group>
+        <group group-layouts="horizontal-container-group">
+            <group group-layouts="green-group hospital-group floating-group"
+                child-layouts="non-bold-label top-label wide-label italic-choice-label no-margin-label">
+                <title>Hospital Cover</title>
+                <state-rules>
+                    <conditional-state state-name="REQUIRED">
+                        <condition-set>
+                            <field-equal field-name="benefit.types">extras.hospital</field-equal>
+                            <field-equal field-name="benefit.types">hospital</field-equal>
+                        </condition-set>
+                    </conditional-state>
+                    <default-state state-name="HIDDEN"/>
+                </state-rules>
+                <choice-field style="RADIO" name="hospital.private-hospital-admission">
+                    <label>Private Hospital Admission</label>
+                    <default-value>
+                        <constant>no</constant>
+                    </default-value>
+                    <validation-rules>
+                        <must-have-value error-message="Please make your choice"/>
+                    </validation-rules>
+                    <constant-options>
+                        <option value="yes">Important</option>
+                        <option value="no">Unimportant</option>
+                    </constant-options>
+                </choice-field>
+                <choice-field style="RADIO" name="hospital.pregnancy">
+                    <label>Pregnancy and Birth</label>
+                    <default-value>
+                        <constant>no</constant>
+                    </default-value>
+                    <validation-rules>
+                        <must-have-value error-message="Please make your choice"/>
+                    </validation-rules>
+                    <constant-options>
+                        <option value="yes">Important</option>
+                        <option value="no">Unimportant</option>
+                    </constant-options>
+                </choice-field>
+                <choice-field style="RADIO" name="hospital.repro">
+                    <label>Assisted Reproductive (e.g IVF)</label>
+                    <default-value>
+                        <constant>no</constant>
+                    </default-value>
+                    <validation-rules>
+                        <must-have-value error-message="Please make your choice"/>
+                    </validation-rules>
+                    <constant-options>
+                        <option value="yes">Important</option>
+                        <option value="no">Unimportant</option>
+                    </constant-options>
+                </choice-field>
+                <choice-field style="RADIO" name="hospital.heart">
+                    <label>Heart Surgery</label>
+                    <default-value>
+                        <constant>no</constant>
+                    </default-value>
+                    <validation-rules>
+                        <must-have-value error-message="Please make your choice"/>
+                    </validation-rules>
+                    <constant-options>
+                        <option value="yes">Important</option>
+                        <option value="no">Unimportant</option>
+                    </constant-options>
+                </choice-field>
+                <choice-field style="RADIO" name="hospital.eye">
+                    <label>Major Eye Surgery</label>
+                    <default-value>
+                        <constant>no</constant>
+                    </default-value>
+                    <validation-rules>
+                        <must-have-value error-message="Please make your choice"/>
+                    </validation-rules>
+                    <constant-options>
+                        <option value="yes">Important</option>
+                        <option value="no">Unimportant</option>
+                    </constant-options>
+                </choice-field>
+                <choice-field style="RADIO" name="hospital.dialysis">
+                    <label>Dialysis</label>
+                    <default-value>
+                        <constant>no</constant>
+                    </default-value>
+                    <validation-rules>
+                        <must-have-value error-message="Please make your choice"/>
+                    </validation-rules>
+                    <constant-options>
+                        <option value="yes">Important</option>
+                        <option value="no">Unimportant</option>
+                    </constant-options>
+                </choice-field>
+                <choice-field style="RADIO" name="hospital.hipknee">
+                    <label>Hip &amp; Knee Joint Replacement</label>
+                    <default-value>
+                        <constant>no</constant>
+                    </default-value>
+                    <validation-rules>
+                        <must-have-value error-message="Please make your choice"/>
+                    </validation-rules>
+                    <constant-options>
+                        <option value="yes">Important</option>
+                        <option value="no">Unimportant</option>
+                    </constant-options>
+                </choice-field>
+                <choice-field style="RADIO" name="hospital.psych">
+                    <label>Psychiatry</label>
+                    <default-value>
+                        <constant>no</constant>
+                    </default-value>
+                    <validation-rules>
+                        <must-have-value error-message="Please make your choice"/>
+                    </validation-rules>
+                    <constant-options>
+                        <option value="yes">Important</option>
+                        <option value="no">Unimportant</option>
+                    </constant-options>
+                </choice-field>
+                <choice-field style="RADIO" name="hospital.rehab">
+                    <label>Rehabilitation</label>
+                    <default-value>
+                        <constant>no</constant>
+                    </default-value>
+                    <validation-rules>
+                        <must-have-value error-message="Please make your choice"/>
+                    </validation-rules>
+                    <constant-options>
+                        <option value="yes">Important</option>
+                        <option value="no">Unimportant</option>
+                    </constant-options>
+                </choice-field>
+                <choice-field style="RADIO" name="hospital.weight">
+                    <label>Surgical Weight Loss Procedures</label>
+                    <default-value>
+                        <constant>no</constant>
+                    </default-value>
+                    <validation-rules>
+                        <must-have-value error-message="Please make your choice"/>
+                    </validation-rules>
+                    <constant-options>
+                        <option value="yes">Important</option>
+                        <option value="no">Unimportant</option>
+                    </constant-options>
+                </choice-field>
+            </group>
+            <group group-layouts="green-group extras-group floating-group"
+                child-layouts="non-bold-label top-label wide-label italic-choice-label no-margin-label">
+                <title>Extras Cover</title>
+                <state-rules>
+                    <conditional-state state-name="REQUIRED">
+                        <condition-set>
+                            <field-equal field-name="benefit.types">extras.hospital</field-equal>
+                            <field-equal field-name="benefit.types">extras</field-equal>
+                        </condition-set>
+                    </conditional-state>
+                    <default-state state-name="HIDDEN"/>
+                </state-rules>
+                <choice-field style="RADIO" name="extras.dental-general">
+                    <label>Dental (General)</label>
+                    <default-value>
+                        <constant>no</constant>
+                    </default-value>
+                    <validation-rules>
+                        <must-have-value error-message="Please make your choice"/>
+                    </validation-rules>
+                    <constant-options>
+                        <option value="yes">Important</option>
+                        <option value="no">Unimportant</option>
+                    </constant-options>
+                </choice-field>
+                <choice-field style="RADIO" name="extras.dental-major">
+                    <label>Dental (Major)</label>
+                    <default-value>
+                        <constant>no</constant>
+                    </default-value>
+                    <validation-rules>
+                        <must-have-value error-message="Please make your choice"/>
+                    </validation-rules>
+                    <constant-options>
+                        <option value="yes">Important</option>
+                        <option value="no">Unimportant</option>
+                    </constant-options>
+                </choice-field>
+                <choice-field style="RADIO" name="extras.optical">
+                    <label>Optical</label>
+                    <default-value>
+                        <constant>no</constant>
+                    </default-value>
+                    <validation-rules>
+                        <must-have-value error-message="Please make your choice"/>
+                    </validation-rules>
+                    <constant-options>
+                        <option value="yes">Important</option>
+                        <option value="no">Unimportant</option>
+                    </constant-options>
+                </choice-field>
+                <choice-field style="RADIO" name="extras.physio">
+                    <label>Physiotherapy</label>
+                    <default-value>
+                        <constant>no</constant>
+                    </default-value>
+                    <validation-rules>
+                        <must-have-value error-message="Please make your choice"/>
+                    </validation-rules>
+                    <constant-options>
+                        <option value="yes">Important</option>
+                        <option value="no">Unimportant</option>
+                    </constant-options>
+                </choice-field>
+                <choice-field style="RADIO" name="extras.chiro">
+                    <label>Chiropractic</label>
+                    <default-value>
+                        <constant>no</constant>
+                    </default-value>
+                    <validation-rules>
+                        <must-have-value error-message="Please make your choice"/>
+                    </validation-rules>
+                    <constant-options>
+                        <option value="yes">Important</option>
+                        <option value="no">Unimportant</option>
+                    </constant-options>
+                </choice-field>
+                <choice-field style="RADIO" name="extras.podiatry">
+                    <label>Podiatry</label>
+                    <default-value>
+                        <constant>no</constant>
+                    </default-value>
+                    <validation-rules>
+                        <must-have-value error-message="Please make your choice"/>
+                    </validation-rules>
+                    <constant-options>
+                        <option value="yes">Important</option>
+                        <option value="no">Unimportant</option>
+                    </constant-options>
+                </choice-field>
+                <choice-field style="RADIO" name="extras.orthotics">
+                    <label>Orthotics</label>
+                    <default-value>
+                        <constant>no</constant>
+                    </default-value>
+                    <validation-rules>
+                        <must-have-value error-message="Please make your choice"/>
+                    </validation-rules>
+                    <constant-options>
+                        <option value="yes">Important</option>
+                        <option value="no">Unimportant</option>
+                    </constant-options>
+                </choice-field>
+                <choice-field style="RADIO" name="extras.psych">
+                    <label>Clinical Psychology</label>
+                    <default-value>
+                        <constant>no</constant>
+                    </default-value>
+                    <validation-rules>
+                        <must-have-value error-message="Please make your choice"/>
+                    </validation-rules>
+                    <constant-options>
+                        <option value="yes">Important</option>
+                        <option value="no">Unimportant</option>
+                    </constant-options>
+                </choice-field>
+                <choice-field style="RADIO" name="extras.pharm">
+                    <label>Pharmaceutical Prescriptions</label>
+                    <default-value>
+                        <constant>no</constant>
+                    </default-value>
+                    <validation-rules>
+                        <must-have-value error-message="Please make your choice"/>
+                    </validation-rules>
+                    <constant-options>
+                        <option value="yes">Important</option>
+                        <option value="no">Unimportant</option>
+                    </constant-options>
+                </choice-field>
+                <choice-field style="RADIO" name="extras.appliances">
+                    <label>Medical Appliances</label>
+                    <default-value>
+                        <constant>no</constant>
+                    </default-value>
+                    <validation-rules>
+                        <must-have-value error-message="Please make your choice"/>
+                    </validation-rules>
+                    <constant-options>
+                        <option value="yes">Important</option>
+                        <option value="no">Unimportant</option>
+                    </constant-options>
+                </choice-field>
+            </group>
+        </group>
+    </page>
+
+    <submission-page name="Callback">
+        <group>
+            <title>Callback</title>
+            <description>Please us know how you would like us to get back to you regarding your
+                policy.</description>
+        </group>
+        <choice-field style="RADIO" name="callback.method"
+            field-layouts="vertical-choice-field top-label wide-label">
+            <label>We will:</label>
+            <constant-options>
+                <option value="phone">Call you back</option>
+                <option value="email">Send you an email</option>
+                <option value="visit">Send a representative to meet with you</option>
+            </constant-options>
+        </choice-field>
+        <group group-layouts="green-group">
+            <title>Contact Details</title>
+            <state-rules>
+                <conditional-state state-name="REQUIRED">
+                    <condition-set>
+                        <field-has-value field-name="callback.method"/>
+                    </condition-set>
+                </conditional-state>
+                <default-state state-name="HIDDEN"/>
+            </state-rules>
+            <input-text-field size="20" name="callback.name">
+                <label>Your Name:</label>
+                <validation-rules>
+                    <must-have-value error-message="Please provide your full name"></must-have-value>
+                </validation-rules>
+            </input-text-field>
+            <input-text-field size="20" name="callback.phone">
+                <state-rules>
+                    <conditional-state state-name="REQUIRED">
+                        <condition-set operator="OR">
+                            <field-equal field-name="callback.method">phone</field-equal>
+                            <field-equal field-name="callback.method">visit</field-equal>
+                        </condition-set>
+                    </conditional-state>
+                    <default-state state-name="HIDDEN"/>
+                </state-rules>
+                <label>Your contact number:</label>
+                <validation-rules>
+                    <min-length value="8" error-message="Please provide a valid phone number"/>
+                    <regex-match error-message="Please provide your phone number">[0-9]+</regex-match>
+                </validation-rules>
+            </input-text-field>
+            <asset>
+                <state-rules>
+                    <conditional-state state-name="REQUIRED">
+                        <condition-set>
+                            <field-equal field-name="callback.method">visit</field-equal>
+                        </condition-set>
+                    </conditional-state>
+                    <default-state state-name="HIDDEN"/>
+                </state-rules>
+                <content>We will call ahead to organise exact times for the meeting.</content>
+            </asset>
+            <date-field name="callback.time">
+                <state-rules>
+                    <conditional-state state-name="REQUIRED">
+                        <condition-set>
+                            <field-equal field-name="callback.method">visit</field-equal>
+                        </condition-set>
+                    </conditional-state>
+                    <default-state state-name="HIDDEN"/>
+                </state-rules>
+                <label>What day would suit you?</label>
+                <format>
+                    <day-element/>
+                    <month-element/>
+                </format>
+            </date-field>
+            <input-text-field size="20" name="callback.email">
+                <state-rules>
+                    <conditional-state state-name="REQUIRED">
+                        <condition-set>
+                            <field-equal field-name="callback.method">email</field-equal>
+                        </condition-set>
+                    </conditional-state>
+                    <default-state state-name="HIDDEN"/>
+                </state-rules>
+                <label>Your email address:</label>
+                <validation-rules>
+                    <contains error-message="Please provide a valid email address.">@</contains>
+                </validation-rules>
+            </input-text-field>
+            <asset asset-layouts="privacy-statement-asset">
+                <content><![CDATA[<p>
+                        We are committed to protecting the privacy of your information.Please refer to our <a href="#">privacy policy</a>.</p>]]></content>
+            </asset>
+        </group>
+    </submission-page>
+
+    <policy encrypt="NONE" single-session-per-owner="false">
+        <park-when-idle-period>PT5M</park-when-idle-period>
+        <retention-period>
+            <incomplete-forms>P7D</incomplete-forms>
+            <complete-forms>P12M</complete-forms>
+        </retention-period>
+    </policy>
+
+    <controls>
+        <start>Begin</start>
+        <next-page enforce-validation="true">Next Page</next-page>
+        <previous-page>Previous</previous-page>
+        <submit-form prompt="Please confirm that you are ready to submit" percentage-complete="0"
+            >Send my Request</submit-form>
+        <quit-form
+            prompt="Please confirm that you would like to exit, all your data will be deleted"
+            >Quit</quit-form>
+    </controls>
+
+    <form-layout maximise-on-start="false" max-pages-displayed="0"/>
+
+    <layouts>
+        <group-layout name="hospital-group">
+            <for-title
+                style="background-image: url('http://downloads.smartforms.myoffice24x7.com/redcross.jpg'); background-repeat: no-repeat; display: table-cell; vertical-align: middle; height: 50px; padding-left: 75px;"
+            />
+        </group-layout>
+        <group-layout name="extras-group">
+            <for-title
+                style="background-image: url('http://downloads.smartforms.myoffice24x7.com/extras.jpg'); background-repeat: no-repeat; display: table-cell; vertical-align: middle; height: 50px; padding-left: 75px;"
+            />
+        </group-layout>
+        <field-layout name="italic-choice-label">
+            <for-input style="font-style: italic;"/>
+        </field-layout>
+        <field-layout name="non-bold-label">
+            <for-label style="font-weight: normal;"/>
+        </field-layout>
+        <field-layout name="wide-label">
+            <for-label style="width: 100%;"/>
+        </field-layout>
+        <field-layout name="top-label">
+            <for-label class="default top" style="margin-bottom: 15px;"/>
+        </field-layout>
+        <field-layout name="no-margin-label">
+            <for-label style="margin-bottom: 0;"/>
+        </field-layout>
+        <group-layout name="green-group">
+            <for-container
+                style="background-color: #f9fbfb; margin-right: 15px; padding: 5px 15px 5px 15px; border-radius: 4px;"
+            />
+        </group-layout>
+        <group-layout name="horizontal-container-group">
+            <for-container class="smartform-clearfix"/>
+        </group-layout>
+        <group-layout name="floating-group">
+            <for-container style="float: left; width: 43%;"/>
+        </group-layout>
+        <field-layout name="vertical-choice-field">
+            <for-input style="display: block; margin-bottom: 10px;"/>
+        </field-layout>
+        <asset-layout name="privacy-statement-asset">
+            <for-content style="font-size: 10px;"/>
+        </asset-layout>
+        <page-layout name="insurance-start-page"> </page-layout>
+    </layouts>
+
+    <states>
+        <state name="REQUIRED" hidden="false" disabled="false" required="true"/>
+        <state name="OPTIONAL" hidden="false" disabled="false" required="false"/>
+        <state name="HIDDEN" hidden="true" disabled="false" required="false"/>
+        <state name="READONLY" hidden="false" disabled="false" required="false" readonly="true"/>
+        <precedence-rules>
+            <precedence-rule>
+                <parent-state-name>REQUIRED</parent-state-name>
+                <child-state-name-pattern>^()$</child-state-name-pattern>
+                <derived-state-name>REQUIRED</derived-state-name>
+            </precedence-rule>
+            <precedence-rule>
+                <parent-state-name>HIDDEN</parent-state-name>
+                <child-state-name-pattern>.*</child-state-name-pattern>
+                <derived-state-name>HIDDEN</derived-state-name>
+            </precedence-rule>
+        </precedence-rules>
+    </states>
+</smartform>

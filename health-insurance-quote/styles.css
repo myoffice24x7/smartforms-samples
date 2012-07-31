@@ -1,0 +1,16 @@
+.smartform-runtime .start-controls {
+  text-align:center;
+}
+.smartform-clearfix {
+    *zoom: 1;
+}
+
+.smartform-clearfix:after {
+    clear: both;
+    content: "";
+    display: table;
+}
+
+.smartform-runtime .start-controls {
+    display: none; 
+}
