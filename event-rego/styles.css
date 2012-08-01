@@ -1,7 +1,7 @@
 .smartform-runtime div.container.required > div.field > div.control > textarea,
 .smartform-runtime div.container.required > div.field > div.control > input,
 .smartform-runtime div.container.required > div.field > div.control > select {
-  background: #fee none;
+  background: #ffc none;
 }
 
 .smartform-runtime div.container.readonly > div.field > div.control > textarea,
