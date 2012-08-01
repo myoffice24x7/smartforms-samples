@@ -1,7 +1,6 @@
 .smartform-runtime div.container.required > div.field > div.control > textarea,
 .smartform-runtime div.container.required > div.field > div.control > input,
 .smartform-runtime div.container.required > div.field > div.control > select {
-  border: thin solid red;
   background: #fee none;
 }
 
@@ -10,7 +9,6 @@
 .smartform-runtime div.container.readonly > div.field > div.control > select {
   background: #eee none;
 }
-
 
 .smartform-runtime .start-page, .smartform-runtime .start-controls {
   text-align:center;
@@ -41,6 +39,7 @@
 
 .smartform-runtime div.il-blk {
   float:left;
+  margin-right:2ex;
 }
 
 .smartform-runtime div.il-blk div.field > label,
@@ -54,10 +53,6 @@
   padding-right: 1ex;
   display: inline-block;
   text-align: right;
-}
-
-.smartform-runtime input[type='text'], .smartform-runtime select{
-  padding: 0.5ex 1ex;
 }
 
 .smartform-runtime div.group, .smartform-runtime div.asset, .smartform-runtime div.field {
