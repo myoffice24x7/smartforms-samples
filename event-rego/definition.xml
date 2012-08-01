@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<smartform xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="file:///D:/com.myoffice/smartforms/resource/definition-schema.12.xsd">
+<smartform xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="smartform-schema.xsd" child-layouts="non-bold-label">
  <description>MyOffice24x7 Smartforms Cloud Information Sessions Registration</description>
  <start-page>
   <title>MyOffice24x7 SmartForms Cloud Information Session Registration</title>
@@ -21,11 +21,11 @@
     <title>Attendee Details</title>
 
     <group>
+     <title>1. Registration Information</title>
       <state-rules>
         <default-state state-name="REQUIRED" />
       </state-rules>
-      <choice-field name='attendee.count' style="SELECT" field-layout-name="auto-label-width">
-        <title><![CDATA[<h3>1. Registration Information</h3>]]></title>
+      <choice-field name='attendee.count' style="SELECT" field-layouts="auto-label-width non-bold-label">
         <label><![CDATA[Select number of people you wish to register:]]></label>
         <constant-options>
          <option value='1' />
@@ -34,7 +34,7 @@
         </constant-options>
       </choice-field>
       
-      <input-text-field name="attendee.organisation" size="40" field-layout-name="auto-label-width">
+      <input-text-field name="attendee.organisation" size="40" field-layouts="auto-label-width non-bold-label"> 
        <label><![CDATA[Company/Organisation Name:]]></label>
        <validation-rules>
         <must-have-value error-message="Field is required"/>
@@ -42,78 +42,81 @@
       </input-text-field>
     </group>
     
-    <group group-layout-name="clearfix-block">
-     <title>Attendee 1</title>
-     <state-rules>
-       <default-state state-name="REQUIRED" />
-     </state-rules>
-
-     <choice-field name="attendee.1.title" style="SELECT" field-layout-name="first-inline-block">
-      <label>Name:</label>
-      <constant-options>
-       <option value='Mr' />
-       <option value='Mrs' />
-       <option value='Miss' />
-       <option value='Ms' />
-      </constant-options>
-     </choice-field>
-     <input-text-field name="attendee.1.firstname" field-layout-name="inline-block" size="15">
-      <validation-rules>
-       <must-have-value error-message="Field is required"/>
-      </validation-rules>
-     </input-text-field>    
-     <input-text-field name="attendee.1.lastname" field-layout-name="inline-block" size="15">
-      <validation-rules>
-       <must-have-value error-message="Field is required"/>
-      </validation-rules>
-     </input-text-field>
-    </group>
-    
-    <group>    
-     <title>Address</title>
-     <state-rules>
-      <default-state state-name='OPTIONAL' />
-     </state-rules>
-     <input-text-field name="attendee.1.address" size="40">
-      <label>Street:</label>
-     </input-text-field>  
-     <input-text-field name="attendee.1.city" size="15">
-      <label>City:</label>
-     </input-text-field>  
-     <input-text-field name="attendee.1.state" size="15">
-      <label>State:</label>
-     </input-text-field>  
-     <input-text-field name="attendee.1.zip" size="4">
-      <label>Zip:</label>
-     </input-text-field>
-    </group>
-     
     <group>
-     <state-rules>
-      <default-state state-name="REQUIRED" />
-     </state-rules>
-     <input-text-field name="attendee.1.telephone" size="15">
-      <label>Telephone:</label>         
-      <validation-rules>
-       <must-have-value error-message="Field is required"/>
-      </validation-rules>
-     </input-text-field>
-     <input-text-field name="attendee.1.cell" size="15">
-      <label>Cell:</label>         
-      <validation-rules>
-       <must-have-value error-message="Field is required"/>
-      </validation-rules>
-     </input-text-field>
-     <input-text-field name="attendee.1.email" size="40">
-      <label>Email:</label>         
-      <validation-rules>
-       <must-have-value error-message="Field is required"/>
-      </validation-rules>
-     </input-text-field>
-    </group>  
+      <title>Attendee 1</title>
+      <group group-layouts="clearfix-block name-group">
+       <title>Name:</title>
+       <state-rules>
+         <default-state state-name="REQUIRED" />
+       </state-rules>
+  
+       <choice-field name="attendee.1.title" style="SELECT" field-layout-name="first-inline-block">
+        <constant-options>
+         <option value='Mr' />
+         <option value='Mrs' />
+         <option value='Miss' />
+         <option value='Ms' />
+        </constant-options>
+       </choice-field>
+       <input-text-field name="attendee.1.firstname" field-layout-name="inline-block" size="15">
+        <validation-rules>
+         <must-have-value error-message="Field is required"/>
+        </validation-rules>
+       </input-text-field>    
+       <input-text-field name="attendee.1.lastname" field-layout-name="inline-block" size="15">
+        <validation-rules>
+         <must-have-value error-message="Field is required"/>
+        </validation-rules>
+       </input-text-field>
+      </group>
+      
+      <group>    
+       <title>Address</title>
+       <state-rules>
+        <default-state state-name='OPTIONAL' />
+       </state-rules>
+       <input-text-field name="attendee.1.address" size="40">
+        <label>Street:</label>
+       </input-text-field>  
+       <input-text-field name="attendee.1.city" size="15">
+        <label>City:</label>
+       </input-text-field>  
+       <input-text-field name="attendee.1.state" size="15">
+        <label>State:</label>
+       </input-text-field>  
+       <input-text-field name="attendee.1.zip" size="4">
+        <label>Zip:</label>
+       </input-text-field>
+      </group>
+       
+      <group>
+       <state-rules>
+        <default-state state-name="REQUIRED" />
+       </state-rules>
+       <input-text-field name="attendee.1.telephone" size="15">
+        <label>Telephone:</label>         
+        <validation-rules>
+         <must-have-value error-message="Field is required"/>
+        </validation-rules>
+       </input-text-field>
+       <input-text-field name="attendee.1.cell" size="15">
+        <label>Cell:</label>         
+        <validation-rules>
+         <must-have-value error-message="Field is required"/>
+        </validation-rules>
+       </input-text-field>
+       <input-text-field name="attendee.1.email" size="40">
+        <label>Email:</label>         
+        <validation-rules>
+         <must-have-value error-message="Field is required"/>
+        </validation-rules>
+       </input-text-field>
+      </group>
+    </group>
 
 
     <group>
+     <title>Attendee 2</title>
      <state-rules>
        <conditional-state state-name="OPTIONAL">
         <condition-set operator="OR">
@@ -123,14 +126,13 @@
        </conditional-state>
        <default-state state-name="HIDDEN" />
      </state-rules>
-     <group group-layout-name="clearfix-block">
-      <title>Attendee 2</title>
+     <group group-layouts="clearfix-block name-group">
+      <title>Name:</title>
       <state-rules>
         <default-state state-name="REQUIRED" />
       </state-rules>
  
       <choice-field name="attendee.2.title" style="SELECT" field-layout-name="first-inline-block">
-       <label>Name:</label>
        <constant-options>
         <option value='Mr' />
         <option value='Mrs' />
@@ -196,6 +198,7 @@
 
 
     <group>
+     <title>Attendee 3</title>
      <state-rules>
        <conditional-state state-name="OPTIONAL">
         <condition-set operator="OR">
@@ -204,13 +207,12 @@
        </conditional-state>
        <default-state state-name="HIDDEN" />
      </state-rules>
-     <group group-layout-name="clearfix-block">
-      <title>Attendee 3</title>
+     <group group-layouts="clearfix-block name-group">
+      <title>Name:</title>
       <state-rules>
         <default-state state-name="REQUIRED" />
       </state-rules>
       <choice-field name="attendee.3.title" style="SELECT" field-layout-name="first-inline-block">
-       <label>Name:</label>
        <constant-options>
         <option value='Mr' />
         <option value='Mrs' />
@@ -280,51 +282,46 @@
   <page name="Session Selection">
     <title><![CDATA[Session Selection]]></title>       
 
-    <choice-field name="session" style="RADIO" field-layout-name="vertical-options">
-     <title>
-      <![CDATA[
-       <h3>2. Select the information session you wish to attend</h3>
-       <p>If you are unable attend the session in your region, you are welcome to register to attend any other session.</p>                 
-      ]]>
-     </title>
-     <validation-rules>
-      <must-have-value error-message="Field is required"/>
-     </validation-rules>
-     <constant-options>
-      <option value='Sydney'><![CDATA[Sydney Convention Centre, Harborview Room - Tuesday, July 17<sup>th</sup> 10 AM - 2 PM]]></option>
-      <option value='Melbourne'><![CDATA[Melbourne Convention Centre, Mathew Flinders Room - Wednesday, July 18<sup>th</sup> 10 AM - 2 PM]]></option>
-      <option value='Brisbane'><![CDATA[Brisbane Convention & Exhibition Centre, Premier Room - Thursday, July 19<sup>th</sup> 10 AM - 2 PM]]></option>
-     </constant-options>
-    </choice-field>
- 
-    <choice-field name="meal" style="CHECKBOX">
-     <title>
-      <![CDATA[
-       <h3>3. For catering purposes, please indicate any special meal preference/s:</h3>
-      ]]>
-     </title>
-     <state-rules>
-      <default-state state-name="OPTIONAL" />
-     </state-rules>
-     <validation-rules>
-      <must-have-value error-message="Field is required"/>
-     </validation-rules>
-     <constant-options>
-      <option value='Halal' />
-      <option value='Kosher' />
-      <option value='Gluten Free' />
-      <option value='Vegetarian' />
-     </constant-options>
-    </choice-field>
-
-
+    <group>
+     <title>2. Select the information session you wish to attend</title>
+     <description>If you are unable attend the session in your region, you are welcome to register to attend any other session.</description>     
+     <choice-field name="session" style="RADIO" field-layouts="vertical-options no-label">
+      <validation-rules>
+       <must-have-value error-message="Field is required"/>
+      </validation-rules>
+      <constant-options>
+       <option value='Sydney'><![CDATA[Sydney Convention Centre, Harborview Room - Tuesday, July 17<sup>th</sup> 10 AM - 2 PM]]></option>
+       <option value='Melbourne'><![CDATA[Melbourne Convention Centre, Mathew Flinders Room - Wednesday, July 18<sup>th</sup> 10 AM - 2 PM]]></option>
+       <option value='Brisbane'><![CDATA[Brisbane Convention & Exhibition Centre, Premier Room - Thursday, July 19<sup>th</sup> 10 AM - 2 PM]]></option>
+      </constant-options>
+     </choice-field>
+    </group>
+     
+    <group>
+     <title>3. For catering purposes, please indicate any special meal preference/s</title>
+     <choice-field name="meal" style="CHECKBOX">
+      <state-rules>
+       <default-state state-name="OPTIONAL" />
+      </state-rules>
+      <validation-rules>
+       <must-have-value error-message="Field is required"/>
+      </validation-rules>
+      <constant-options>
+       <option value='Halal' />
+       <option value='Kosher' />
+       <option value='Gluten Free' />
+       <option value='Vegetarian' />
+      </constant-options>
+     </choice-field>
+    </group>
+   
   </page>        
   
  <submission-page name="Final Page">
+  <title>What Now?</title>  
   <asset>
    <content>
     <![CDATA[
-     <h3>What Now?</h3>
      <p>Once you hit the submit button below, you will receive an email with a PDF eTicket attached. Print out this eTicket and bring it with you to your chosen seminar.</p>
      <p>If you do not receive your eTicket within 24 hours of submission, please contact MyOffice24x7 Pty Ltd.</p> 
     ]]>
@@ -344,18 +341,30 @@
     <next-page enforce-validation="true">Continue</next-page>
     <previous-page>Go Back</previous-page>
     <submit-form prompt="Please confirm that you are ready to submit" percentage-complete="100">Submit</submit-form>
-    <!-- <reset-page label="Reset Page" prompt="Please confirm that you are ready to reset all fields on this page" /> -->
     <restart-form>Restart Form</restart-form>
     <quit-form prompt="Please confirm that you would like to quit (all your information will be deleted)">Quit Form</quit-form> 
   </controls>
   <layouts>
+   
+   <field-layout name="non-bold-label">
+     <for-label style="font-weight: normal;"/>
+   </field-layout>
+   
+   <field-layout name="no-label">
+    <for-label style="display: none;"/>
+   </field-layout>
+   
+   <group-layout name="name-group">
+     <for-container class="name-group" />
+     <for-title style="font-size: inherit; font-weight: normal; width: 10ex; padding-right: 1ex; text-align: right;"/>
+   </group-layout>
+   
    <field-layout name="inline-block">
     <for-container class='il-blk' />
    </field-layout>
 
    <field-layout name="first-inline-block">
-    <for-container class='il-blk' />
-    <for-label class='first-item' />
+    <for-container class='il-blk' style='margin-left:11ex'/>
    </field-layout>
 
    <field-layout name="auto-label-width">
