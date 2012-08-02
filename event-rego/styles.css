@@ -1,3 +1,7 @@
+.smartform-runtime .page {
+    font-family: "Lucida Grande","Lucida Sans Unicode", Tahoma, sans-serif;
+}
+
 .smartform-runtime div.container.required > div.field > div.control > textarea,
 .smartform-runtime div.container.required > div.field > div.control > input,
 .smartform-runtime div.container.required > div.field > div.control > select {

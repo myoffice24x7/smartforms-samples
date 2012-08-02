@@ -3,7 +3,10 @@
  <description>MyOffice24x7 Smartforms Cloud Information Sessions Registration</description>
  <start-page>
   <title>MyOffice24x7 SmartForms Cloud Information Session Registration</title>
-  <description><![CDATA[This form allows up to three people to register for one of the SmartForms Cloud Information Sessions taking place in Brisbane, Sydney and Melbourne]]></description>
+  <description><![CDATA[
+   <img src="//cloudfront.myoffice24x7.com/image/img-32760"/>
+   <p>This form allows up to three people to register for one of the SmartForms Cloud Information Sessions taking place in Brisbane, Sydney and Melbourne</p>
+  ]]></description>
  </start-page>
 
  <completed-page>
