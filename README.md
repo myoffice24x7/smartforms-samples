@@ -11,4 +11,6 @@ Included Samples
 
 * [Event Registration](//github.com/myoffice24x7/smartforms-samples/tree/master/event-rego) - an event registration form with e-ticket, PDF generation and email workflows
 
+* [Health Insurance Quote](//github.com/myoffice24x7/smartforms-samples/tree/master/health-insurance-quote) - a health insurance quote form, for customers to signal what they are looking for to a sales rep
+
 You will find `.far` files in the root of the repository. You can import these directly into SmartForms, which will configure the included Form Types for you.
